@@ -58,7 +58,7 @@ app.post('/buy-product', async (req, res) => {
 		response = await networkObj.contract.submitTransaction('BuyProduct', req.body.buyerId.toString(), req.body.productId.toString(), req.body.amount.toString());
 	} catch (e) {
 		await networkObj.gateway.disconnect();
-		res.send(e);
+		res.send({error: e.message, detail: e.endorsements[0].message});
 	}
 	await networkObj.gateway.disconnect();
 
