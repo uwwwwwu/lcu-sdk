@@ -40,6 +40,13 @@ app.post('/setup-sample-users', async (req, res) => {
 	res.send({message: "Success?"})
 });
 
+app.post('/add-product', async (req, res) => {
+	let networkObj = await network.connectToNetwork(appAdmin);
+	let response = await network.invoke(networkObj, false, 'AddProduct', '');
+	console.log(response);
+	res.send({message: "Success add product?"})
+});
+
 app.get('/getCurrentStanding', async (req, res) => {
 
 	let networkObj = await network.connectToNetwork(appAdmin);

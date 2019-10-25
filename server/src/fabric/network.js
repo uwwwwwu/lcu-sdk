@@ -82,21 +82,21 @@ exports.connectToNetwork = async function (userName) {
 
 exports.invoke = async function (networkObj, isQuery, func, args) {
   try {
-    console.log('inside invoke');
-    console.log(`isQuery: ${isQuery}, func: ${func}, args: ${args}`);
-    console.log(util.inspect(networkObj));
+    // console.log('inside invoke');
+    // console.log(`isQuery: ${isQuery}, func: ${func}, args: ${args}`);
+    // console.log(util.inspect(networkObj));
 
 
     // console.log(util.inspect(JSON.parse(args[0])));
 
     if (isQuery === true) {
-      console.log('inside isQuery');
+      // console.log('inside isQuery');
 
       if (args) {
-        console.log('inside isQuery, args');
-        console.log(args);
+        // console.log('inside isQuery, args');
+        // console.log(args);
         let response = await networkObj.contract.evaluateTransaction(func, args);
-        console.log(response);
+        // console.log(response);
         console.log(`Transaction ${func} with args ${args} has been evaluated`);
   
         await networkObj.gateway.disconnect();
@@ -106,7 +106,7 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
       } else {
 
         let response = await networkObj.contract.evaluateTransaction(func);
-        console.log(response);
+        // console.log(response);
         console.log(`Transaction ${func} without args has been evaluated`);
   
         await networkObj.gateway.disconnect();
@@ -114,24 +114,24 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
         return response;
       }
     } else {
-      console.log('notQuery');
+      // console.log('notQuery');
       if (args) {
-        console.log('notQuery, args');
-        console.log('$$$$$$$$$$$$$ args: ');
-        console.log(args);
-        console.log(func);
-        console.log(typeof args);
+        // console.log('notQuery, args');
+        // console.log('$$$$$$$$$$$$$ args: ');
+        // console.log(args);
+        // console.log(func);
+        // console.log(typeof args);
 
         args = JSON.parse(args[0]);
 
-        console.log(util.inspect(args));
+        // console.log(util.inspect(args));
         args = JSON.stringify(args);
-        console.log(util.inspect(args));
+        // console.log(util.inspect(args));
 
-        console.log('before submit');
-        console.log(util.inspect(networkObj));
+        // console.log('before submit');
+        // console.log(util.inspect(networkObj));
         let response = await networkObj.contract.submitTransaction(func, args);
-        console.log('after submit');
+        // console.log('after submit');
 
         console.log(response);
         console.log(`Transaction ${func} with args ${args} has been submitted`);
@@ -143,7 +143,7 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
 
       } else {
         let response = await networkObj.contract.submitTransaction(func);
-        console.log(response);
+        // console.log(response);
         console.log(`Transaction ${func} with args has been submitted`);
   
         await networkObj.gateway.disconnect();
