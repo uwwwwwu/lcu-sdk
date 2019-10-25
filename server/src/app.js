@@ -37,14 +37,14 @@ app.post('/setup-sample-users', async (req, res) => {
 	let networkObj = await network.connectToNetwork(appAdmin);
 	let response = await network.invoke(networkObj, false, 'SetupSampleUsers', '');
 	console.log(response)
-	res.send({message: "Success?"})
+	res.send({ message: "Success?" })
 });
 
 app.post('/add-product', async (req, res) => {
 	let networkObj = await network.connectToNetwork(appAdmin);
-	let response = await network.invoke(networkObj, false, 'AddProduct', '');
+	let response = await network.invoke(networkObj, false, 'AddProduct', 'cl');
 	console.log(response);
-	res.send({message: "Success add product?"})
+	res.send({ message: "Success add product?" })
 });
 
 app.get('/getCurrentStanding', async (req, res) => {
