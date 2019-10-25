@@ -100,7 +100,7 @@ app.get('/products/:productId', async (req, res) => {
 		response = await networkObj.contract.evaluateTransaction('GetProductById', req.param.productId.toString());
 	} catch (e) {
 		await networkObj.gateway.disconnect();
-		res.send(JSON.parse(e.message));
+		res.send(e);
 	}
 	await networkObj.gateway.disconnect();
 
