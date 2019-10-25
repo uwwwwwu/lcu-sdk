@@ -93,7 +93,7 @@ app.get('/products', async (req, res) => {
 	res.send(JSON.parse(response.toString()));
 });
 
-app.get('/products:productId', async (req, res) => {
+app.get('/products/:productId', async (req, res) => {
 	let networkObj = await network.connectToNetwork(appAdmin);
 	var response;
 	try {
