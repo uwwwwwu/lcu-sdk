@@ -117,8 +117,10 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
 
 				// console.log('before submit');
 				// console.log(util.inspect(networkObj));
+
+				var response;
 				try {
-					let response = await networkObj.contract.submitTransaction(func, args);
+					response = await networkObj.contract.submitTransaction(func, args);
 					console.log(`Transaction ${func} with args ${args} has been submitted`);
 				} catch(e) {
 					console.log("ERRRO AIIII")
@@ -130,13 +132,19 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
 
 
 			} else {
-				let response = await networkObj.contract.submitTransaction(func);
+				var response;
+				try {
+					response = await networkObj.contract.submitTransaction(func);
+					console.log(`Transaction ${func} with args has been submitted`);
+				} catch(e) {
+					console.log("ERROR AIIIII")
+					return e
+				}
 				// console.log(response);
-				console.log(`Transaction ${func} with args has been submitted`);
 
 				await networkObj.gateway.disconnect();
 
-				return response;
+				return response.toString();
 			}
 		}
 
