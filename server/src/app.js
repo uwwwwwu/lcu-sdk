@@ -68,6 +68,20 @@ app.post('/buy-product', async (req, res) => {
 	res.send(JSON.parse(response.toString()));
 });
 
+app.get('/get-product-history', async (req, res) => {
+	let networkObj = await network.connectToNetwork(appAdmin);
+	var response;
+	try {
+		response = await networkObj.contract.evaluateTransaction('GetProductHistory', '001');
+	} catch(e) {
+		await networkObj.gateway.disconnect();
+		res.send(e);
+	}
+	await networkObj.gateway.disconnect();
+
+	res.send(JSON.parse(response.toString()));
+});
+
 app.get('/getCurrentStanding', async (req, res) => {
 
 	let networkObj = await network.connectToNetwork(appAdmin);
