@@ -64,7 +64,7 @@ app.get('/get-product-history/:productId', async (req, res) => {
 		response = await networkObj.contract.evaluateTransaction('GetProductHistory', req.params.productId.toString());
 	} catch(e) {
 		await networkObj.gateway.disconnect();
-		res.send(e);
+		res.send(JSON.parse(e.message));
 	}
 	await networkObj.gateway.disconnect();
 
