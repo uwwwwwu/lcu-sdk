@@ -34,7 +34,7 @@ app.post('/add-product', async (req, res) => {
 	var response;
 	try {
 		response = await networkObj.contract.submitTransaction('AddProduct', 'kp', '002', 'Orange', 'Farm House B', '1100', 'CBNU Food Safe', '50');
-	} catch(e) {
+	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(e);
 	}
@@ -45,10 +45,18 @@ app.post('/add-product', async (req, res) => {
 
 app.post('/buy-product', async (req, res) => {
 	let networkObj = await network.connectToNetwork(appAdmin);
+
+	if ((typeof req.body.buyerId === 'undefined' || req.body.buyerId === '') ||
+		(typeof req.body.productId === 'undefined' || req.body.productId === '') ||
+		(typeof req.body.amount === 'undefined' || req.body.amount === '')) {
+		res.send({ status: false, error: { message: 'Missing body.' } });
+		return;
+	}
+
 	var response;
 	try {
-		response = await networkObj.contract.submitTransaction('BuyProduct', 'tc', '001', '10');
-	} catch(e) {
+		response = await networkObj.contract.submitTransaction('BuyProduct', req.body.buyerId.toString(), req.body.productId.toString(), req.body.amount.toString());
+	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(e);
 	}
@@ -62,7 +70,7 @@ app.get('/get-product-history/:productId', async (req, res) => {
 	var response;
 	try {
 		response = await networkObj.contract.evaluateTransaction('GetProductHistory', req.params.productId.toString());
-	} catch(e) {
+	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(JSON.parse(e.message));
 	}
