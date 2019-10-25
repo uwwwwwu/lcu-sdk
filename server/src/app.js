@@ -42,7 +42,7 @@ app.post('/setup-sample-users', async (req, res) => {
 
 app.post('/add-product', async (req, res) => {
 	let networkObj = await network.connectToNetwork(appAdmin);
-	let response = await network.invoke(networkObj, false, 'AddProduct', 'cl');
+	let response = await network.invoke(networkObj, false, 'AddProduct', ['cl']);
 	console.log(response);
 	res.send({ message: "Success add product?" })
 });
