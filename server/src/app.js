@@ -97,10 +97,10 @@ app.get('/products/:productId', async (req, res) => {
 	let networkObj = await network.connectToNetwork(appAdmin);
 	var response;
 	try {
-		response = await networkObj.contract.evaluateTransaction('GetProductById', req.param.productId.toString());
+		response = await networkObj.contract.evaluateTransaction('GetProductById', req.params.productId.toString());
 	} catch (e) {
 		await networkObj.gateway.disconnect();
-		res.send(e);
+		res.send(JSON.parse(e.message));
 	}
 	await networkObj.gateway.disconnect();
 
