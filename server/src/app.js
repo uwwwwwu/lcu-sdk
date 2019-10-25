@@ -42,9 +42,16 @@ app.post('/setup-sample-users', async (req, res) => {
 
 app.post('/add-product', async (req, res) => {
 	let networkObj = await network.connectToNetwork(appAdmin);
-	let response = await network.invoke(networkObj, false, 'AddProduct', '');
-	console.log(response);
-	res.send({ message: "Success add product?" })
+	var response;
+	try {
+		response = await networkObj.contract.submitTransaction('AddProduct', '');
+	} catch(e) {
+		await networkObj.gateway.disconnect();
+		res.send(e)
+	}
+	await networkObj.gateway.disconnect();
+
+	res.send(response.toString());
 });
 
 app.get('/getCurrentStanding', async (req, res) => {
