@@ -44,7 +44,7 @@ app.post('/add-product', async (req, res) => {
 	let networkObj = await network.connectToNetwork(appAdmin);
 	var response;
 	try {
-		response = await networkObj.contract.submitTransaction('AddProduct', '');
+		response = await networkObj.contract.submitTransaction('AddProduct', 'cl', '001', 'Apple', 'Farm House A', '1000', 'CBNU Food Safe', '60');
 	} catch(e) {
 		await networkObj.gateway.disconnect();
 		res.send(e)
