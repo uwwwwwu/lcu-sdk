@@ -44,14 +44,14 @@ app.post('/add-product', async (req, res) => {
 	let networkObj = await network.connectToNetwork(appAdmin);
 	var response;
 	try {
-		response = await networkObj.contract.submitTransaction('AddProduct', 'cl', '001', 'Apple', 'Farm House A', '1000', 'CBNU Food Safe', '60');
+		response = await networkObj.contract.submitTransaction('AddProduct', 'kp', '002', 'Orange', 'Farm House B', '1100', 'CBNU Food Safe', '50');
 	} catch(e) {
 		await networkObj.gateway.disconnect();
 		res.send(e)
 	}
 	await networkObj.gateway.disconnect();
 
-	res.send(response.toString());
+	res.send(JSON.parse(response.toString()));
 });
 
 app.get('/getCurrentStanding', async (req, res) => {
