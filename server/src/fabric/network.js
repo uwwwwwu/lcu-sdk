@@ -30,15 +30,6 @@ exports.connectToNetwork = async function (userName) {
 	try {
 		const walletPath = path.join(process.cwd(), 'wallet');
 		const wallet = new FileSystemWallet(walletPath);
-		// console.log(`Wallet path: ${walletPath}`);
-		// console.log('userName: ');
-		// console.log(userName);
-
-		// console.log('wallet: ');
-		// console.log(util.inspect(wallet));
-		// console.log('ccp: ');
-		// console.log(util.inspect(ccp));
-		// userName = 'V123412';
 		const userExists = await wallet.exists(userName);
 		if (!userExists) {
 			console.log('An identity for the user ' + userName + ' does not exist in the wallet');
@@ -74,84 +65,6 @@ exports.connectToNetwork = async function (userName) {
 		let response = {};
 		response.error = error;
 		return response;
-	} finally {
-		// console.log('Done connecting to network.');
-		// gateway.disconnect();
-	}
-};
-
-
-exports.invoke = async function (networkObj, isQuery, func, args) {
-	try {
-		// console.log('inside invoke');
-		// console.log(`isQuery: ${isQuery}, func: ${func}, args: ${args}`);
-		// console.log(util.inspect(networkObj));
-
-
-		// console.log(util.inspect(JSON.parse(args[0])));
-
-		if (isQuery === true) {
-			if (args) {
-				let response = await networkObj.contract.evaluateTransaction(func, args);
-				// console.log(response);
-				console.log(`Transaction ${func} with args ${args} has been evaluated`);
-
-				await networkObj.gateway.disconnect();
-
-				return response;
-			} else {
-				let response = await networkObj.contract.evaluateTransaction(func);
-				// console.log(response);
-				console.log(`Transaction ${func} without args has been evaluated`);
-
-				await networkObj.gateway.disconnect();
-
-				return response;
-			}
-		} else {
-			if (args) {
-				args = JSON.parse(args[0]);
-
-				// console.log(util.inspect(args));
-				args = JSON.stringify(args);
-				// console.log(util.inspect(args));
-
-				// console.log('before submit');
-				// console.log(util.inspect(networkObj));
-
-				var response;
-				try {
-					response = await networkObj.contract.submitTransaction(func, args);
-					console.log(`Transaction ${func} with args ${args} has been submitted`);
-				} catch(e) {
-					console.log("ERRRO AIIII")
-					return e
-				}
-				await networkObj.gateway.disconnect();
-
-				return response.toString();
-
-
-			} else {
-				var response;
-				try {
-					response = await networkObj.contract.submitTransaction(func);
-					console.log(`Transaction ${func} with args has been submitted`);
-				} catch(e) {
-					console.log("ERROR AIIIII")
-					return e
-				}
-				// console.log(response);
-
-				await networkObj.gateway.disconnect();
-
-				return response.toString();
-			}
-		}
-
-	} catch (error) {
-		console.error(`Failed to submit transaction: ${error}`);
-		return error;
 	}
 };
 
