@@ -316,7 +316,7 @@ func (lcu *LifeCooperationUnionChaincode) SetupSampleUsers(stub shim.ChaincodeSt
 	var user2 = User{DocType: "user", Id: "kp", Name: "Yin Kokpheng", Phone: "010-6514-9090", Address: "Cheongju-si", Role: "supplier"}
 	var user3 = User{DocType: "user", Id: "tc", Name: "Aing Teckchun", Phone: "010-6515-9090", Address: "Cheongju-si", Role: "user"}
 	var user4 = User{DocType: "user", Id: "nv", Name: "Ren Sothearin", Phone: "020-9236-9090", Address: "Cheongju-si", Role: "user"}
-	var user5 = User{DocType: "user", Id: "mom", Name: "오은화", Phone: "010-9394-9090", Address: "Cheongju-si", Role: "user"}
+	var user5 = User{DocType: "user", Id: "e.wha", Name: "오은화", Phone: "010-9394-9090", Address: "Cheongju-si", Role: "user"}
 	jsonUser1, _ := json.Marshal(user1)
 	jsonUser2, _ := json.Marshal(user2)
 	jsonUser3, _ := json.Marshal(user3)
