@@ -35,6 +35,7 @@ type Product struct {
 	Amount       int    `json:"amount"`
 	ImportedBy   User   `json:"imported_by"`
 	Remark       string `json:"remark"`
+	Image        string `json:"image"`
 	ModifiedDate string `json:"modified_date"`
 	CreatedDate  string `json:"created_date"`
 }
@@ -52,7 +53,7 @@ type PurchaseHistory struct {
 // Init : chaincode init method
 func (lcu *LifeCooperationUnionChaincode) Init(stub shim.ChaincodeStubInterface) peer.Response {
 	fmt.Println("Init called")
-	return shim.Success([]byte("{\"message\":\"Init called\"}"))
+	return shim.Success([]byte("{\"status\":true,\"message\":\"Init called\"}"))
 }
 
 // Invoke : chaincode invoke method
@@ -75,7 +76,7 @@ func (lcu *LifeCooperationUnionChaincode) Invoke(stub shim.ChaincodeStubInterfac
 		return lcu.GetProductHistory(stub, args)
 	}
 
-	return shim.Error("{\"error\":\"Invalid function name\"}")
+	return shim.Error("{\"status\":false,\"error\":\"Invalid function name\"}")
 }
 
 // GetAllProducts : query all products
@@ -85,11 +86,11 @@ func (lcu *LifeCooperationUnionChaincode) GetAllProducts(stub shim.ChaincodeStub
 	QryIterator, err := stub.GetQueryResult(qry)
 
 	if err != nil {
-		return shim.Error("{\"error\":" + err.Error() + "}")
+		return shim.Error("{\"status\":false,\"error\":" + err.Error() + "}")
 	}
 
 	counter := 0
-	resultJson := "{\"message\":\"Success\",\"data\":["
+	resultJson := "{\"status\":true,\"message\":\"Success\",\"data\":["
 	for QryIterator.HasNext() {
 		var resultKV *queryresult.KV
 		var err error
@@ -97,7 +98,7 @@ func (lcu *LifeCooperationUnionChaincode) GetAllProducts(stub shim.ChaincodeStub
 		resultKV, err = QryIterator.Next()
 
 		if err != nil {
-			return shim.Error("{\"error\":" + err.Error() + "}")
+			return shim.Error("{\"status\":false,\"error\":" + err.Error() + "}")
 		}
 
 		// key := resultKV.GetKey()
@@ -124,24 +125,24 @@ func (lcu *LifeCooperationUnionChaincode) GetProductById(stub shim.ChaincodeStub
 	}
 	bytes, err := stub.GetState("product_" + args[0])
 	if err != nil {
-		return shim.Error("{\"error\":\"" + err.Error() + "\"}")
+		return shim.Error("{\"status\":false,\"error\":\"" + err.Error() + "\"}")
 	}
 	if bytes == nil {
-		return shim.Error("{\"error\":\"Product not found\"}")
+		return shim.Error("{\"status\":false,\"error\":\"Product not found\"}")
 	}
 	var product Product
 	err = json.Unmarshal([]byte(string(bytes)), &product)
 	if err != nil {
-		return shim.Error("{\"error\":\"" + err.Error() + "\"}")
+		return shim.Error("{\"status\":false,\"error\":\"" + err.Error() + "\"}")
 	}
-	res := "{\"message\":\"Success\",\"data\":" + string(bytes) + "}"
+	res := "{\"status\":true,\"message\":\"Success\",\"data\":" + string(bytes) + "}"
 	return shim.Success([]byte(res))
 }
 
 // AddProduct : add product to ledger
 func (lcu *LifeCooperationUnionChaincode) AddProduct(stub shim.ChaincodeStubInterface, args []string) peer.Response {
-	if len(args) < 7 {
-		return shim.Error("{\"error\":\"7 arguments are required (SupplierID, ProductID, ProductName, FarmHouse, Price, VerifyedBy, Amount)\"}")
+	if len(args) < 8 {
+		return shim.Error("{\"status\":false,\"error\":\"8 arguments are required (SupplierID, ProductID, ProductName, FarmHouse, Price, VerifyedBy, Amount, Image)\"}")
 	}
 
 	supplierId := args[0]
@@ -149,18 +150,18 @@ func (lcu *LifeCooperationUnionChaincode) AddProduct(stub shim.ChaincodeStubInte
 	// Validate Supplier
 	userBytes, err := stub.GetState("user_" + supplierId)
 	if err != nil {
-		return shim.Error("{\"error\":\"" + err.Error() + "\"}")
+		return shim.Error("{\"status\":false,\"error\":\"" + err.Error() + "\"}")
 	}
 	if userBytes == nil {
-		return shim.Error("{\"error\":\"Invalid supplier ID\"}")
+		return shim.Error("{\"status\":false,\"error\":\"Invalid supplier ID\"}")
 	}
 	var supplier User
 	err = json.Unmarshal([]byte(string(userBytes)), &supplier)
 	if err != nil {
-		return shim.Error("{\"error\":\"" + err.Error() + "\"}")
+		return shim.Error("{\"status\":false,\"error\":\"" + err.Error() + "\"}")
 	}
 	if supplier.Role != "supplier" {
-		return shim.Error("{\"error\":\"Invalid supplier ID\"}")
+		return shim.Error("{\"status\":false,\"error\":\"Invalid supplier ID\"}")
 	}
 
 	productId := args[1]
@@ -172,50 +173,52 @@ func (lcu *LifeCooperationUnionChaincode) AddProduct(stub shim.ChaincodeStubInte
 	var price, amount int
 	price, err = strconv.Atoi(args[4])
 	if err != nil {
-		return shim.Error("{\"error\":\"" + err.Error() + "\"}")
+		return shim.Error("{\"status\":false,\"error\":\"" + err.Error() + "\"}")
 	}
 	amount, err = strconv.Atoi(args[6])
 	if err != nil {
-		return shim.Error("{\"error\":\"" + err.Error() + "\"}")
+		return shim.Error("{\"status\":false,\"error\":\"" + err.Error() + "\"}")
 	}
 
 	createdDate := time.Now().Format("2006-01-02 15:04:05")
 
-	var product = Product{DocType: "product", ProductId: productId, ProductName: productName, FarmHouse: farmHouse, Price: price, VerifiedBy: verifiedBy, Amount: amount, ImportedBy: supplier, Remark: "Supplier added a product.", ModifiedDate: createdDate, CreatedDate: createdDate}
+	image := args[7]
+
+	var product = Product{DocType: "product", ProductId: productId, ProductName: productName, FarmHouse: farmHouse, Price: price, VerifiedBy: verifiedBy, Amount: amount, ImportedBy: supplier, Remark: "Supplier added a product.", Image: image, ModifiedDate: createdDate, CreatedDate: createdDate}
 
 	productJson, _ := json.Marshal(product)
 
 	stub.PutState("product_"+product.ProductId, productJson)
-	return shim.Success([]byte("{\"message\":\"Product added successfully.\"}"))
+	return shim.Success([]byte("{\"status\":true,\"message\":\"Product added successfully.\"}"))
 }
 
 // GetProductHistory : get history of product history
 func (luc *LifeCooperationUnionChaincode) GetProductHistory(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) < 1 {
-		return shim.Error("{\"error\":\"A arguments are required (ProductID)\"}")
+		return shim.Error("{\"status\":false,\"error\":\"A arguments are required (ProductID)\"}")
 	}
 
 	// Validate product
 	bytes, getStateErr := stub.GetState("product_" + args[0])
 	if getStateErr != nil {
-		return shim.Error("{\"error\":\"" + getStateErr.Error() + "\"}")
+		return shim.Error("{\"status\":false,\"error\":\"" + getStateErr.Error() + "\"}")
 	}
 	if bytes == nil {
-		return shim.Error("{\"error\":\"Invalid product ID\"}")
+		return shim.Error("{\"status\":false,\"error\":\"Invalid product ID\"}")
 	}
 
 	historyQueryIterator, err := stub.GetHistoryForKey("product_" + args[0])
 	if err != nil {
-		return shim.Error("{\"error\":\"" + getStateErr.Error() + "\"}")
+		return shim.Error("{\"status\":false,\"error\":\"" + getStateErr.Error() + "\"}")
 	}
 
 	var resultModification *queryresult.KeyModification
 	counter := 0
-	resultJson := "{\"message\":\"Success\",\"data\":["
+	resultJson := "{\"status\":true,\"message\":\"Success\",\"data\":["
 	for historyQueryIterator.HasNext() {
 		resultModification, err = historyQueryIterator.Next()
 		if err != nil {
-			return shim.Error("{\"error\":\"Error reading product history. " + getStateErr.Error() + "\"}")
+			return shim.Error("{\"status\":false,\"error\":\"Error reading product history. " + getStateErr.Error() + "\"}")
 		}
 		data := "{\"txn\":\"" + resultModification.GetTxId() + "\""
 		data += ",\"value\":" + string(resultModification.GetValue()) + "}"
@@ -233,7 +236,7 @@ func (luc *LifeCooperationUnionChaincode) GetProductHistory(stub shim.ChaincodeS
 // BuyProduct : user buy product in some amount
 func (lcu *LifeCooperationUnionChaincode) BuyProduct(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) < 3 {
-		return shim.Error("{\"error\":\"3 arguments are required (BuyerId, ProductID, Amount)\"}")
+		return shim.Error("{\"status\":false,\"error\":\"3 arguments are required (BuyerId, ProductID, Amount)\"}")
 	}
 
 	buyerId := args[0]
@@ -242,39 +245,39 @@ func (lcu *LifeCooperationUnionChaincode) BuyProduct(stub shim.ChaincodeStubInte
 	// Validate buyer
 	bytes, err := stub.GetState("user_" + buyerId)
 	if err != nil {
-		return shim.Error("{\"error\":\"" + err.Error() + "\"}")
+		return shim.Error("{\"status\":false,\"error\":\"" + err.Error() + "\"}")
 	}
 	if bytes == nil {
-		return shim.Error("{\"error\":\"Invalid buyer ID\"}")
+		return shim.Error("{\"status\":false,\"error\":\"Invalid buyer ID\"}")
 	}
 	var buyer User
 	err = json.Unmarshal([]byte(string(bytes)), &buyer)
 	if err != nil {
-		return shim.Error("{\"error\":\"" + err.Error() + "\"}")
+		return shim.Error("{\"status\":false,\"error\":\"" + err.Error() + "\"}")
 	}
 
 	// Validate product
 	bytes, err = stub.GetState("product_" + productId)
 	if err != nil {
-		return shim.Error("{\"error\":\"" + err.Error() + "\"}")
+		return shim.Error("{\"status\":false,\"error\":\"" + err.Error() + "\"}")
 	}
 	if bytes == nil {
-		return shim.Error("{\"error\":\"Invalid product ID\"}")
+		return shim.Error("{\"status\":false,\"error\":\"Invalid product ID\"}")
 	}
 	var product Product
 	err = json.Unmarshal([]byte(string(bytes)), &product)
 	if err != nil {
-		return shim.Error("{\"error\":\"" + err.Error() + "\"}")
+		return shim.Error("{\"status\":false,\"error\":\"" + err.Error() + "\"}")
 	}
 
 	// Validate amount
 	var amount int
 	amount, err = strconv.Atoi(args[2])
 	if err != nil {
-		return shim.Error("{\"error\":\"" + err.Error() + "\"}")
+		return shim.Error("{\"status\":false,\"error\":\"" + err.Error() + "\"}")
 	}
 	if amount > product.Amount {
-		return shim.Error("{\"error\":\"Only " + strconv.Itoa(product.Amount) + " of product(s) available in stock.\"}")
+		return shim.Error("{\"status\":false,\"error\":\"Only " + strconv.Itoa(product.Amount) + " of product(s) available in stock.\"}")
 	}
 
 	today := time.Now()
@@ -292,7 +295,7 @@ func (lcu *LifeCooperationUnionChaincode) BuyProduct(stub shim.ChaincodeStubInte
 	productJson, _ := json.Marshal(product)
 	stub.PutState("product_"+product.ProductId, productJson)
 
-	return shim.Success([]byte("{\"message\":\"User buy success\"}"))
+	return shim.Success([]byte("{\"status\":true,\"message\":\"User buy success\"}"))
 }
 
 // GetUsers : get user and filter by user role
@@ -303,7 +306,7 @@ func (lcu *LifeCooperationUnionChaincode) GetUsers(stub shim.ChaincodeStubInterf
 		} else if args[0] == "supplier" {
 			return shim.Success([]byte("Query user filter => supplier"))
 		} else {
-			return shim.Error("{\"error\":\"Invalid argument name. Do you mean user or supplier?\"}")
+			return shim.Error("{\"status\":false,\"error\":\"Invalid argument name. Do you mean user or supplier?\"}")
 		}
 	} else {
 		return shim.Success([]byte("Query all"))
@@ -327,7 +330,7 @@ func (lcu *LifeCooperationUnionChaincode) SetupSampleUsers(stub shim.ChaincodeSt
 	stub.PutState("user_"+user3.Id, jsonUser3)
 	stub.PutState("user_"+user4.Id, jsonUser4)
 	stub.PutState("user_"+user5.Id, jsonUser5)
-	return shim.Success([]byte("{\"message\":\"Successfully add 5 users to ledger\"}"))
+	return shim.Success([]byte("{\"status\":true,\"message\":\"Successfully add 5 users to ledger\"}"))
 }
 
 // Chaincode registers with the Shim on startup
