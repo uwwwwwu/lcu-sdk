@@ -140,16 +140,12 @@ var storage = multer.diskStorage({
 });
 var upload = multer({storage: storage});
 
-app.post('/upload', upload.single('image'), async (req, res) => {
-	try {
-		if (!req.file) {
-			res.json({error: 'Error 505'});
-			return;
-		}
-		res.json({message: 'Success'});
-	} catch(e) {
-		res.send(e)
+app.post('/upload', upload.single('image'), async (req, res, next) => {
+	if (!req.file) {
+		res.json({error: 'Error 505'});
+		return next(err);
 	}
+	res.json({message: 'http://master:8081/images' + req.file.filename});
 });
 
 app.listen(process.env.PORT || 8081);
