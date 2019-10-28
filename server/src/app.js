@@ -8,7 +8,7 @@ const util = require('util');
 const path = require('path');
 const fs = require('fs');
 
-const formidable = require('formidable');
+const multer = require('multer');
 
 let network = require('./fabric/network.js');
 
@@ -109,16 +109,41 @@ app.get('/products/:productId', async (req, res) => {
 	res.send(JSON.parse(response.toString()));
 });
 
-app.post('/uplaod', async (req, res) => {
-	var form = new formidable.IncomingForm();
-	form.parse(req, function (err, fields, files) {
-		var oldpath = files.filetoupload.path;
-		var newpath = '/home/chhaileng/lcu-sdk/server/' + files.filetoupload.name;
-		fs.rename(oldpath, newpath, function (err) {
-			if (err) throw err;
-			res.send('haha')
-		});
-	});
+
+
+
+
+
+
+// Upload 
+
+var storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, '../images');
+	},
+	filename: (req, file, cb) => {
+		console.log(file);
+		var filetype = '';
+		if (file.mimetype === 'image/gif') {
+			filetype = 'gif';
+		}
+		if (file.mimetype === 'image/png') {
+			filetype = 'png';
+		}
+		if (file.mimetype === 'image/jpeg') {
+			filetype = 'jpg';
+		}
+		cb(null, 'image-' + Date.now() + '.' + filetype);
+	}
+});
+var upload = multer({storage: storage});
+
+app.post('/upload', upload.single('file'), async (req, res) => {
+	if (!req.file) {
+		res.json({error: 'Error 505'});
+		return;
+	}
+	res.json({message: 'Success'});
 });
 
 app.listen(process.env.PORT || 8081);
