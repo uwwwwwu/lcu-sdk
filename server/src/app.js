@@ -8,6 +8,8 @@ const util = require('util');
 const path = require('path');
 const fs = require('fs');
 
+const formidable = require('formidable');
+
 let network = require('./fabric/network.js');
 
 const app = express();
@@ -33,7 +35,7 @@ app.post('/add-product', async (req, res) => {
 	let networkObj = await network.connectToNetwork(appAdmin);
 	var response;
 	try {
-		response = await networkObj.contract.submitTransaction('AddProduct', 'kp', '002', 'Orange', 'Farm House B', '1100', 'CBNU Food Safe', '50');
+		response = await networkObj.contract.submitTransaction('AddProduct', 'cl', '002', 'Orange', 'Farm House B', '1100', 'CBNU Food Safe', '50');
 	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(e);
@@ -107,5 +109,16 @@ app.get('/products/:productId', async (req, res) => {
 	res.send(JSON.parse(response.toString()));
 });
 
+app.post('/uplaod', async (req, res) => {
+	var form = new formidable.IncomingForm();
+	form.parse(req, function (err, fields, files) {
+		var oldpath = files.filetoupload.path;
+		var newpath = '/home/chhaileng/lcu-sdk/server/' + files.filetoupload.name;
+		fs.rename(oldpath, newpath, function (err) {
+			if (err) throw err;
+			res.send('haha')
+		});
+	});
+});
 
 app.listen(process.env.PORT || 8081);

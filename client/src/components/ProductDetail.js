@@ -60,7 +60,7 @@ export default class ProductDetail extends React.Component {
                                 <img alt='Apple' style={{ width: '100%', objectFit: 'cover' }} src='https://media.npr.org/assets/img/2019/04/02/usda-cat-photo-4-002--01be5c36f4bfab6c95144cfef3ef98bfbffb6006-s1200.png' />
                                 <p style={{ color: 'gray' }}>
                                     <Button style={{ backgroundColor: 'transparent ', boxShadow: 'none', padding: 0, cursor: 'pointer' }}
-                                        tooltip="Check by CBNU Food Safe">
+                                        tooltip={'Checked by ' + this.state.product.verified_by}>
                                         <i className="tiny material-icons" style={{ color: '#4caf50' }}>check_circle</i>
                                     </Button>  {this.state.product.farmhouse} • {this.state.product.farmhouse}
                                 </p>

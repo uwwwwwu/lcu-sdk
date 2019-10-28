@@ -16,6 +16,7 @@ export default class ProductHistory extends React.Component {
         axios.get('http://master:8081/product-history/' + this.props.match.params.id).then(res => {
             this.props.setLoading(false);
             console.log(res.data)
+            res.data.data.reverse();
             this.setState({
                 histories: res.data.data,
                 product_id: res.data.data[0].value.product_id,
