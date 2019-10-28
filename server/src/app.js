@@ -24,6 +24,8 @@ const config = JSON.parse(configJSON);
 //use this identity to query
 const appAdmin = config.appAdmin;
 
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
 app.post('/setup-sample-users', async (req, res) => {
 	let networkObj = await network.connectToNetwork(appAdmin);
 	let response = await network.invoke(networkObj, false, 'SetupSampleUsers', '');
@@ -119,7 +121,7 @@ app.get('/products/:productId', async (req, res) => {
 
 var storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, './images');
+		cb(null, './public/images');
 	},
 	filename: (req, file, cb) => {
 		console.log(file);
