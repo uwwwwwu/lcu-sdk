@@ -33,7 +33,7 @@ app.post('/setup-sample-users', async (req, res) => {
 		response = await networkObj.contract.submitTransaction('SetupSampleUsers');
 	} catch (e) {
 		await networkObj.gateway.disconnect();
-		res.send(e);
+		res.send(JSON.parse(e.endorsements[0].message));
 	}
 	await networkObj.gateway.disconnect();
 
@@ -69,7 +69,7 @@ app.post('/add-product', async (req, res) => {
 		response = await networkObj.contract.submitTransaction('AddProduct', supplierId, productId, productName, farmhouse, price, verifiedBy, amount, image);
 	} catch (e) {
 		await networkObj.gateway.disconnect();
-		res.send(e);
+		res.send(JSON.parse(e.endorsements[0].message));
 	}
 	await networkObj.gateway.disconnect();
 
