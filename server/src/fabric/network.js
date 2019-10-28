@@ -48,7 +48,7 @@ exports.connectToNetwork = async function (userName) {
 
 		console.log('Connected to mychannel. ');
 		// Get the contract we have installed on the peer
-		const contract = await network.getContract('ahmom_cc1');
+		const contract = await network.getContract('ahmom_cc');
 
 
 		let networkObj = {
