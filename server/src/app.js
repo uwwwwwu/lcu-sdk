@@ -119,7 +119,7 @@ app.get('/products/:productId', async (req, res) => {
 
 var storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, '../images');
+		cb(null, './images');
 	},
 	filename: (req, file, cb) => {
 		console.log(file);
@@ -138,7 +138,7 @@ var storage = multer.diskStorage({
 });
 var upload = multer({storage: storage});
 
-app.post('/upload', upload.single('file'), async (req, res) => {
+app.post('/upload', upload.single('image'), async (req, res) => {
 	if (!req.file) {
 		res.json({error: 'Error 505'});
 		return;
