@@ -41,10 +41,32 @@ app.post('/setup-sample-users', async (req, res) => {
 });
 
 app.post('/add-product', async (req, res) => {
+	if ((typeof req.body.supplierId === 'undefined' || req.body.supplierId === '') ||
+		(typeof req.body.productId === 'undefined' || req.body.productId === '') ||
+		(typeof req.body.productName === 'undefined' || req.body.productName === '') ||
+		(typeof req.body.farmhouse === 'undefined' || req.body.farmhouse === '') ||
+		(typeof req.body.price === 'undefined' || req.body.price === '') ||
+		(typeof req.body.verifiedBy === 'undefined' || req.body.verifiedBy === '') ||
+		(typeof req.body.amount === 'undefined' || req.body.amount === '') ||
+		(typeof req.body.image === 'undefined' || req.body.image === '')) {
+		res.send({ status: false, error: { message: 'Missing body.' } });
+		return;
+	}
+
 	let networkObj = await network.connectToNetwork(appAdmin);
 	var response;
+
+	var supplierId = req.body.supplierId.toString();
+	var productId = req.body.productId.toString();
+	var productName = req.body.productName.toString();
+	var farmhouse = req.body.farmhouse.toString();
+	var price = req.body.price.toString();
+	var verifiedBy = req.body.verifiedBy.toString();
+	var amount = req.body.amount.toString();
+	var image = req.body.image.toString();
+
 	try {
-		response = await networkObj.contract.submitTransaction('AddProduct', 'cl', '002', 'Orange', 'Farm House B', '1100', 'CBNU Food Safe', '50');
+		response = await networkObj.contract.submitTransaction('AddProduct', supplierId, productId, productName, farmhouse, price, verifiedBy, amount, image);
 	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(e);
@@ -55,8 +77,6 @@ app.post('/add-product', async (req, res) => {
 });
 
 app.post('/buy-product', async (req, res) => {
-	let networkObj = await network.connectToNetwork(appAdmin);
-
 	if ((typeof req.body.buyerId === 'undefined' || req.body.buyerId === '') ||
 		(typeof req.body.productId === 'undefined' || req.body.productId === '') ||
 		(typeof req.body.amount === 'undefined' || req.body.amount === '')) {
@@ -64,6 +84,7 @@ app.post('/buy-product', async (req, res) => {
 		return;
 	}
 
+	let networkObj = await network.connectToNetwork(appAdmin);
 	var response;
 	try {
 		response = await networkObj.contract.submitTransaction('BuyProduct', req.body.buyerId.toString(), req.body.productId.toString(), req.body.amount.toString());
@@ -125,7 +146,6 @@ app.get('/products/:productId', async (req, res) => {
 
 
 // Upload 
-
 var storage = multer.diskStorage({
 	destination: (req, file, cb) => {
 		cb(null, './public/images');
