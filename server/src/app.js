@@ -30,7 +30,7 @@ app.post('/setup-sample-users', async (req, res) => {
 	let networkObj = await network.connectToNetwork(appAdmin);
 	var response;
 	try {
-		response = await networkObj.contract.submitTransaction('SetupSampleUser');
+		response = await networkObj.contract.submitTransaction('SetupSampleUsers');
 	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(e);
