@@ -142,7 +142,7 @@ func (lcu *LifeCooperationUnionChaincode) GetProductById(stub shim.ChaincodeStub
 // AddProduct : add product to ledger
 func (lcu *LifeCooperationUnionChaincode) AddProduct(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) < 8 {
-		return shim.Error("{\"status\":false,\"error\":\"8 arguments are required (SupplierID, ProductID, ProductName, FarmHouse, Price, VerifyedBy, Amount, Image)\"}")
+		return shim.Error("{\"status\":false,\"error\":\"8 arguments are required (SupplierID, ProductID, ProductName, FarmHouse, Price, VerifiedBy, Amount, Image)\"}")
 	}
 
 	supplierId := args[0]
