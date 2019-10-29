@@ -169,10 +169,10 @@ var upload = multer({storage: storage});
 
 app.post('/upload', upload.single('image'), async (req, res) => {
 	if (!req.file) {
-		res.json({error: 'Error 505'});
+		res.json({status: false, error: 'Error 505, Upload failed'});
 		return;
 	}
-	res.json({message: 'http://master:8081/images/' + req.file.filename});
+	res.json({status: true, data: 'http://master:8081/images/' + req.file.filename});
 });
 
 app.listen(process.env.PORT || 8081);
