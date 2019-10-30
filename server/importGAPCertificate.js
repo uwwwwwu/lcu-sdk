@@ -23,13 +23,13 @@ const config = JSON.parse(configJSON);
 const appAdmin = config.appAdmin;
 
 async function importCertificate() {
+	let networkObj = await network.connectToNetwork(appAdmin);
 	var certificates;
 	fs.readFile('clean_data.json', 'utf8', async function (err, data) {
 		if (err) throw err;
 		certificates = JSON.parse(data);
 
 		for(var i=0; i<certificates.length; i++) {
-			let networkObj = await network.connectToNetwork(appAdmin);
 			try {
 				var response = await networkObj.contract.evaluateTransaction('GetUsers');
 				console.log(certificates[i].certificate_number + " ==> " + response)
