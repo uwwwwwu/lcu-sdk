@@ -28,18 +28,17 @@ async function importCertificate() {
 		if (err) throw err;
 		certificates = JSON.parse(data);
 
-		certificates.forEach(async cert => {
-			console.log(cert.certificate_number)
+		for(var i=0; i<certificates.length; i++) {
 			let networkObj = await network.connectToNetwork(appAdmin);
 			try {
-				var response = await networkObj.contract.evaluateTransaction('GetUser');
-				console.log(response)
+				var response = await networkObj.contract.evaluateTransaction('GetUsers');
+				console.log(certificates[i].certificate_number + " ==> " + response)
 			} catch (e) {
 				await networkObj.gateway.disconnect();
 				console.log(e)
 			}
 			await networkObj.gateway.disconnect();
-		});
+		}
 
 	})
 }
