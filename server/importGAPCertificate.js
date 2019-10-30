@@ -30,6 +30,15 @@ async function importCertificate() {
 
 		certificates.forEach(cert => {
 			console.log(cert.certificate_number)
+			let networkObj = await network.connectToNetwork(appAdmin);
+			try {
+				var response = await networkObj.contract.evaluateTransaction('GetUser');
+				console.log(response)
+			} catch (e) {
+				await networkObj.gateway.disconnect();
+				console.log(e)
+			}
+			await networkObj.gateway.disconnect();
 		});
 
 	})
