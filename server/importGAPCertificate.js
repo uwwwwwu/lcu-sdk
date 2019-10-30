@@ -44,7 +44,7 @@ async function importCertificate() {
 			var productionPlan = certificates[i].production_plan;
 			var createdDate = certificates[i].created_date;
 			try {
-				var response = await networkObj.contract.submitTransaction('BuyProduct', certificateNumber, certificateAgency, classificationName, producerOrganization, validFrom, validUntil, certifiedProductName, address, farmerRegistrationNumber, parcelRegistrationNumber, cultivatedArea, productionPlan, createdDate);
+				var response = await networkObj.contract.submitTransaction('ImportGAPCertificate', certificateNumber, certificateAgency, classificationName, producerOrganization, validFrom, validUntil, certifiedProductName, address, farmerRegistrationNumber, parcelRegistrationNumber, cultivatedArea, productionPlan, createdDate);
 				console.log(certificateNumber + ' ==> ' + response)
 			} catch (e) {
 				console.log(e)
