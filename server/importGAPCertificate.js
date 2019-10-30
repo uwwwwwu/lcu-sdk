@@ -24,7 +24,7 @@ const appAdmin = config.appAdmin;
 
 async function importCertificate() {
 	var certificates;
-	fs.readFile('clean_data.json', 'utf8', function (err, data) {
+	fs.readFile('clean_data.json', 'utf8', async function (err, data) {
 		if (err) throw err;
 		certificates = JSON.parse(data);
 
