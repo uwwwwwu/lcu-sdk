@@ -23,11 +23,15 @@ const config = JSON.parse(configJSON);
 const appAdmin = config.appAdmin;
 
 async function importCertificate() {
-	var obj;
+	var certificates;
 	fs.readFile('clean_data.json', 'utf8', function (err, data) {
 		if (err) throw err;
-		obj = JSON.parse(data);
-		console.log(obj[0])
+		certificates = JSON.parse(data);
+
+		certificates.forEach(cert => {
+			console.log(cert.certificate_number)
+		});
+
 	})
 }
 
