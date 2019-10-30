@@ -30,15 +30,16 @@ async function importCertificate() {
 		certificates = JSON.parse(data);
 
 		for(var i=0; i<certificates.length; i++) {
+			var productId = certificates[i].certificate_number;
+			var productName = certificates[i].certificate_agency;
 			try {
-				var response = await networkObj.contract.evaluateTransaction('GetUsers');
-				console.log(certificates[i].certificate_number + " ==> " + response)
+				var response = await networkObj.contract.submitTransaction('AddProduct', 'cl', productId, productName, 'farmhouse', 100, 'verifiedBy', 100, 'image');
+				console.log(productId + ' ==> ' + response)
 			} catch (e) {
-				await networkObj.gateway.disconnect();
 				console.log(e)
 			}
-			await networkObj.gateway.disconnect();
 		}
+		await networkObj.gateway.disconnect();
 
 	})
 }
