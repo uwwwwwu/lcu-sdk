@@ -141,6 +141,15 @@ app.get('/products/:productId', async (req, res) => {
 
 
 
+app.get('/read-json', async(req, res) => {
+	var obj;
+	fs.readFile('clean_data.json', 'utf8', function(err, data) {
+		if (err) throw err;
+		obj = JSON.parse(data);
+		console.log(obj)
+	})
+	res.send("testing read json")
+})
 
 
 
