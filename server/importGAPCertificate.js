@@ -30,11 +30,22 @@ async function importCertificate() {
 		certificates = JSON.parse(data);
 
 		for(var i=0; i<certificates.length; i++) {
-			var productId = certificates[i].certificate_number;
-			var productName = certificates[i].certificate_agency;
+			var certificateNumber = certificates[i].certificate_number;
+			var certificateAgency = certificates[i].certificate_agency;
+			var classificationName = certificates[i].classification_name;
+			var producerOrganization = certificates[i].producer_organization;
+			var validFrom = certificates[i].valid_from;
+			var validUntil = certificates[i].valid_until;
+			var certifiedProductName = certificates[i].certified_product_name;
+			var address = certificates[i].address;
+			var farmerRegistrationNumber = certificates[i].farmer_registration_number;
+			var parcelRegistrationNumber = certificates[i].parcel_registration_number;
+			var cultivatedArea = certificates[i].cultivated_area;
+			var productionPlan = certificates[i].production_plan;
+			var createdDate = certificates[i].created_date;
 			try {
-				var response = await networkObj.contract.submitTransaction('AddProduct', 'cl', productId, productName, 'farmhouse', '100', 'verifiedBy', '100', 'image');
-				console.log(productId + ' ==> ' + response)
+				var response = await networkObj.contract.submitTransaction('ImportGAPCertificate', certificateNumber, certificateAgency, classificationName, producerOrganization, validFrom, validUntil, certifiedProductName, address, farmerRegistrationNumber, parcelRegistrationNumber, cultivatedArea, productionPlan, createdDate);
+				console.log(certificateNumber + ' ==> ' + response)
 			} catch (e) {
 				console.log(e)
 			}
