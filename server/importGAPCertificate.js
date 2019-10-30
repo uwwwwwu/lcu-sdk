@@ -28,7 +28,7 @@ async function importCertificate() {
 		if (err) throw err;
 		certificates = JSON.parse(data);
 
-		certificates.forEach(cert => {
+		certificates.forEach(async cert => {
 			console.log(cert.certificate_number)
 			let networkObj = await network.connectToNetwork(appAdmin);
 			try {
