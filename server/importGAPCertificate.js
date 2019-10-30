@@ -1,26 +1,26 @@
-//Import Hyperledger Fabric 1.4 programming model - fabric-network
 'use strict';
 
-const { FileSystemWallet, Gateway } = require('fabric-network');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const morgan = require('morgan');
+const util = require('util');
 const path = require('path');
 const fs = require('fs');
 
-//connect to the config file
+let network = require('./src/fabric/network.js');
+
+const app = express();
+app.use(morgan('combined'));
+app.use(bodyParser.json());
+app.use(cors());
+
 const configPath = path.join(process.cwd(), './config.json');
 const configJSON = fs.readFileSync(configPath, 'utf8');
 const config = JSON.parse(configJSON);
 
-// connect to the connection file
-const ccpPath = path.join(process.cwd(), './ibpConnection.json');
-const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
-const connectionProfile = JSON.parse(ccpJSON);
-
-// A wallet stores a collection of identities for use
-const walletPath = path.join(process.cwd(), './wallet');
-const wallet = new FileSystemWallet(walletPath);
-console.log(`Wallet path: ${walletPath}`);
-
-const peerIdentity = 'voterApp-admin';
+//use this identity to query
+const appAdmin = config.appAdmin;
 
 async function importCertificate() {
 	var obj;
