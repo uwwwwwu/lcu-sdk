@@ -33,7 +33,7 @@ async function importCertificate() {
 			var productId = certificates[i].certificate_number;
 			var productName = certificates[i].certificate_agency;
 			try {
-				var response = await networkObj.contract.submitTransaction('AddProduct', 'cl', productId, productName, 'farmhouse', 100, 'verifiedBy', 100, 'image');
+				var response = await networkObj.contract.submitTransaction('AddProduct', 'cl', productId, productName, 'farmhouse', '100', 'verifiedBy', '100', 'image');
 				console.log(productId + ' ==> ' + response)
 			} catch (e) {
 				console.log(e)
