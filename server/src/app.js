@@ -146,7 +146,7 @@ app.get('/read-json', async(req, res) => {
 	fs.readFile('clean_data.json', 'utf8', function(err, data) {
 		if (err) throw err;
 		obj = JSON.parse(data);
-		console.log(obj)
+		console.log(obj[0])
 	})
 	res.send("testing read json")
 })
