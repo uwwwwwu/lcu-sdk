@@ -40,6 +40,20 @@ app.post('/setup-sample-users', async (req, res) => {
 	res.send(JSON.parse(response.toString()));
 });
 
+app.get('/user/:userId', async (req, res) => {
+	let networkObj = await network.connectToNetwork(appAdmin);
+	var response;
+	try {
+		response = await networkObj.contract.evaluateTransaction('GetUserById', req.params.userId.toString());
+	} catch (e) {
+		await networkObj.gateway.disconnect();
+		res.send(JSON.parse(e.message));
+	}
+	await networkObj.gateway.disconnect();
+
+	res.send(JSON.parse(response.toString()));
+});
+
 app.post('/add-product', async (req, res) => {
 	if ((typeof req.body.supplierId === 'undefined' || req.body.supplierId === '') ||
 		(typeof req.body.productId === 'undefined' || req.body.productId === '') ||
@@ -49,7 +63,7 @@ app.post('/add-product', async (req, res) => {
 		(typeof req.body.verifiedBy === 'undefined' || req.body.verifiedBy === '') ||
 		(typeof req.body.amount === 'undefined' || req.body.amount === '') ||
 		(typeof req.body.image === 'undefined' || req.body.image === '')) {
-		res.send({ status: false, error: { message: 'Missing body.' } });
+		res.send({ status: false, error: 'Missing body.' });
 		return;
 	}
 
@@ -138,21 +152,6 @@ app.get('/products/:productId', async (req, res) => {
 
 	res.send(JSON.parse(response.toString()));
 });
-
-
-
-app.get('/read-json', async(req, res) => {
-	var obj;
-	fs.readFile('clean_data.json', 'utf8', function(err, data) {
-		if (err) throw err;
-		obj = JSON.parse(data);
-		console.log(obj[0])
-	})
-	res.send("testing read json")
-})
-
-
-
 
 // Upload 
 var storage = multer.diskStorage({
