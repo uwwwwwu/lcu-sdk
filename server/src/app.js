@@ -86,6 +86,7 @@ app.post('/add-product', async (req, res) => {
 	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(JSON.parse(e.endorsements[0].message));
+		return;
 	}
 	await networkObj.gateway.disconnect();
 
