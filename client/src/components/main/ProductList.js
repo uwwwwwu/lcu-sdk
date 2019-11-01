@@ -24,8 +24,8 @@ export default class ProductList extends React.Component {
     }
     render() {
         let productCards = this.state.products.map(p => {
-            return <div key={p.product_id} className="col-md-6 col-lg-4" style={{ paddingBottom: 20 }}>
-                <div className="card">
+            return <div key={p.product_id} className="col-md-6 col-lg-4" style={{ paddingBottom: 20}}>
+                <div className="card" style={{ height: 384 }}>
                     <img className="card-img-top w-100 d-block" src={p.image} alt='thumbnail' style={{width:'100%', height: 200, objectFit: 'cover'}} />
                     <div className="card-body">
                         <h4 className="card-title text-center">{p.product_name}<br /></h4>

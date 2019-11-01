@@ -91,7 +91,7 @@ export default class AddProduct extends React.Component {
                     farmhouse: this.state.farmhouse,
                     price: this.state.price,
                     gapCertNum: this.state.gapCertNum,
-                    envCertNum: this.state.envMessage,
+                    envCertNum: this.state.envCertNum,
                     amount: this.state.amount,
                     image: imageUrl
                 }).then(res => {
@@ -170,7 +170,7 @@ export default class AddProduct extends React.Component {
                                         <div className="form-row">
                                             <div className="col-md-12 mb-3">
                                                 <label htmlFor="gap-cert">GAP Certificate Number</label>
-                                                <input type="text" style={{ backgroundPosition: '97%' }} value={this.state.gapCertNum} onChange={this.onGAPCertNumChanged.bind(this)} className={this.state.isValidGAP ? 'form-control is-valid' : 'form-control is-invalid'} id="gap-cert" placeholder="GAP Certificate Number" required />
+                                                <input type="text" style={{ backgroundPosition: '97%'}} value={this.state.gapCertNum} onChange={this.onGAPCertNumChanged.bind(this)} className={this.state.isValidGAP ? 'form-control is-valid' : 'form-control is-invalid'} id="gap-cert" placeholder="GAP Certificate Number" required />
                                                 <div className={this.state.isValidGAP ? 'valid-feedback' : 'invalid-feedback'}>{this.state.gapMessage}</div>
                                             </div>
                                             <div className="col-md-12 mb-3">

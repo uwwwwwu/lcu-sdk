@@ -7,7 +7,8 @@ export default class Purchase extends React.Component {
         super();
         this.state = {
             product: {},
-            amount: 1
+            amount: 1,
+            buyer: {}
         }
     }
 
@@ -17,6 +18,23 @@ export default class Purchase extends React.Component {
 
     componentDidMount() {
         this.props.setPageTitle('Purchase');
+
+        // check login
+        if (localStorage.getItem('userId') === null) {
+            alert('Not login!!! Login first ^^');
+            return;
+        }
+
+        axios.get(API_HOST + '/user/' + localStorage.getItem('userId')).then(res => {
+            if (res.data.status) {
+                this.setState({buyer: res.data.data})
+            } else {
+                alert(res.data.error)
+            }
+        }).catch(e => {
+            console.log(e);
+        })
+
         axios.get(API_HOST + '/products/' + this.props.match.params.id).then(res => {
             console.log(res.data)
             if (res.data.status) {
@@ -24,8 +42,31 @@ export default class Purchase extends React.Component {
             }
         }).catch(err => {
             console.log(err)
+        });
+    }
+
+    onPaymentClick() {
+        // check login
+        if (localStorage.getItem('userId') === null) {
+            alert('Not login!!! Login first ^^');
+            return;
+        }
+
+        axios.post(API_HOST + '/buy-product', {
+            buyerId: localStorage.getItem('userId'),
+            productId: this.props.match.params.id,
+            amount: this.state.amount
+        }).then(res => {
+            if (res.data.status) {
+                alert(res.data.message);
+            } else {
+                alert(res.data.error)
+            }
+        }).catch(err => {
+            console.log(err)
         })
     }
+
     render() {
         return (
             <div className="col-md-12 col-lg-8 col-xl-8">
@@ -80,13 +121,13 @@ export default class Purchase extends React.Component {
                                 <div className="products">
                                     <h4 className="title">Delivery Information</h4>
                                     <div className="item"><span className="price" style={{ fontWeight: 'bold' }}>Name :</span>
-                                        <p className="item-name">Kokpheng Yin</p>
+                                        <p className="item-name">{this.state.buyer.name}</p>
                                     </div>
                                     <div className="item"><span className="price" style={{ fontWeight: 'bold' }}>Phone :</span>
-                                        <p className="item-name">010 – 1234 – 5678</p>
+                                        <p className="item-name">{this.state.buyer.phone}</p>
                                     </div>
                                     <div className="item"><span className="price" style={{ fontWeight: 'bold' }}>Address :</span>
-                                        <p className="item-name">청주시 서원구 충대로1, 충북대학교 S21-4, OOO호</p>
+                                        <p className="item-name">{this.state.buyer.address}</p>
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +135,9 @@ export default class Purchase extends React.Component {
                         <div className="col-md-5 col-lg-5">
                             <div className="summary">
                                 <h3>Summary</h3>
-                                <h4><span className="text"><strong>Payment Amt:</strong></span><span className="price" style={{ marginLeft: 0 }}>{this.state.product.price * this.state.amount}원</span></h4><button className="btn btn-primary btn-block btn-lg" type="button"><strong>Payment</strong></button></div>
+                                <h4><span className="text"><strong>Payment Amt:</strong></span><span className="price" style={{ marginLeft: 0 }}>{this.state.product.price * this.state.amount}원</span></h4>
+                                <button className="btn btn-primary btn-block btn-lg" type="button" onClick={this.onPaymentClick.bind(this)}><strong>Payment</strong></button>
+                            </div>
                         </div>
                     </div>
                 </div>
