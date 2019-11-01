@@ -76,12 +76,13 @@ app.post('/add-product', async (req, res) => {
 	var productName = req.body.productName.toString();
 	var farmhouse = req.body.farmhouse.toString();
 	var price = req.body.price.toString();
-	var verifiedBy = req.body.verifiedBy.toString();
+	var gapCertNum = req.body.gapCertNum.toString();
+	var envCertNum = req.body.envCertNum.toString();
 	var amount = req.body.amount.toString();
 	var image = req.body.image.toString();
 
 	try {
-		response = await networkObj.contract.submitTransaction('AddProduct', supplierId, productId, productName, farmhouse, price, verifiedBy, amount, image);
+		response = await networkObj.contract.submitTransaction('AddProduct', supplierId, productId, productName, farmhouse, price, gapCertNum, envCertNum, amount, image);
 	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(JSON.parse(e.endorsements[0].message));
