@@ -60,7 +60,8 @@ app.post('/add-product', async (req, res) => {
 		(typeof req.body.productName === 'undefined' || req.body.productName === '') ||
 		(typeof req.body.farmhouse === 'undefined' || req.body.farmhouse === '') ||
 		(typeof req.body.price === 'undefined' || req.body.price === '') ||
-		(typeof req.body.verifiedBy === 'undefined' || req.body.verifiedBy === '') ||
+		(typeof req.body.gapCertNum === 'undefined' || req.body.gapCertNum === '') ||
+		(typeof req.body.envCertNum === 'undefined' || req.body.envCertNum === '') ||
 		(typeof req.body.amount === 'undefined' || req.body.amount === '') ||
 		(typeof req.body.image === 'undefined' || req.body.image === '')) {
 		res.send({ status: false, error: 'Missing body.' });

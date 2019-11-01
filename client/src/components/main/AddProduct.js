@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import {API_HOST} from '../../ApiConfig';
 
 export default class AddProduct extends React.Component {
     constructor() {
@@ -30,7 +31,7 @@ export default class AddProduct extends React.Component {
 
     onInputFileChanged(event) {
         var file = this.refs.inputFile.files[0];
-        if (file==null) {
+        if (file == null) {
             return;
         }
         var reader = new FileReader();
@@ -45,19 +46,22 @@ export default class AddProduct extends React.Component {
 
     onFormSubmit(e) {
         e.preventDefault();
+        // Check user login & role
+        if (localStorage.getItem('userId') === null) {
+            alert('Not login!!! Login first ^^');
+            return;
+        }
+
+
         const formData = new FormData();
         formData.append('image', this.state.imageFile);
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
-        };
-        axios.post("http://master:8081/upload", formData, config).then((res) => {
+        const config = {headers: {'content-type': 'multipart/form-data'}};
+        axios.post(API_HOST + "/upload", formData, config).then((res) => {
             console.log(res.data)
             if (res.data.status) {
                 var imageUrl = res.data.data;
 
-                axios.post('http://master:8081/add-product', {
+                axios.post(API_HOST + '/add-product', {
                     supplierId: "cl",
                     productId: this.state.productId,
                     productName: this.state.productName,
@@ -135,23 +139,26 @@ export default class AddProduct extends React.Component {
                     </div>
                     <div className="content">
                         <div className="row no-gutters">
-                            <div className="col-md-7 col-lg-7">
+                            <div className="col-md-12 col-lg-12">
                                 <div className="items" style={{ backgroundColor: 'rgb(247,251,255)' }}>
                                     <div className="products">
                                         <h4 className="title">Certificate Status</h4>
-                                        <div className="item">
-                                            <span className="price" style={{ fontWeight: 'bold' }}>Checked by:</span> CBNU Coop <i style={{ color: 'green' }} className="icon-check icon"></i>
-                                        </div>
-                                        <div className="item">
-                                            <span className="price" style={{ fontWeight: 'bold' }}>GAP Certificate </span> <i style={{ color: 'green' }} className="icon-check icon"></i>
-                                        </div>
-                                        <div className="item">
-                                            <span className="price" style={{ fontWeight: 'bold' }}>Environment-friendly Certificate </span> <i style={{ color: 'green' }} className="icon-check icon"></i>
+                                        <div className="form-row">
+                                            <div className="col-md-12 mb-3">
+                                                <label htmlFor="gap-cert">GAP Certificate Number</label>
+                                                <input type="text" style={{backgroundPosition: '97%'}} className="form-control is-valid" id="gap-cert" placeholder="GAP Certificate Number" required />
+                                                <div className="valid-feedback">Valid Certificate</div>
+                                            </div>
+                                            <div className="col-md-12 mb-3">
+                                                <label htmlFor="env-cert">Environment-friendly Certificate Number</label>
+                                                <input type="text" style={{backgroundPosition: '97%'}} className="form-control is-invalid" id="env-cert" placeholder="Environment-friendly Certificate Number" required />
+                                                <div className="invalid-feedback">asdf Certificate</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-md-5 col-lg-5">
+                            <div className="col-md-12 col-lg-12">
                                 <div className="summary">
                                     <button className="btn btn-primary btn-block btn-lg" type="submit"><strong>Add Product</strong></button>
                                 </div>

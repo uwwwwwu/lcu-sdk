@@ -1,12 +1,30 @@
 import React from 'react';
-
+import axios from 'axios';
 import {Link} from 'react-router-dom';
+import {API_HOST} from '../ApiConfig';
 
 export default class Header extends React.Component {
     onLoginClick() {
-        var userId = prompt("Enter User ID");
+        var userId = prompt("Development ONLY!!! Enter User ID");
+        if (userId === null) {
+            return;
+        }
+        if (userId === '') {
+            return;
+        }
         if (userId !== null || userId !== '') { 
-            localStorage.setItem('userId', userId);
+            axios.get(API_HOST + '/user/' + userId).then(res => {
+                if (res.data.status) {
+                    alert('Success! Login as ' + res.data.data.name);
+                    localStorage.setItem('userId', userId);
+                    localStorage.setItem('username', res.data.data.name);
+                    window.location.reload();
+                } else {
+                    alert(res.data.error)
+                }
+            }).catch(e => {
+                console.log(e);
+            })
         }
     }
     render() {
