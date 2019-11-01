@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import {API_HOST} from '../../ApiConfig';
 
 export default class Purchase extends React.Component {
     constructor() {
@@ -16,7 +17,7 @@ export default class Purchase extends React.Component {
 
     componentDidMount() {
         this.props.setPageTitle('Purchase');
-        axios.get('http://master:8081/products/' + this.props.match.params.id).then(res => {
+        axios.get(API_HOST + '/products/' + this.props.match.params.id).then(res => {
             console.log(res.data)
             if (res.data.status) {
                 this.setState({ product: res.data.data })

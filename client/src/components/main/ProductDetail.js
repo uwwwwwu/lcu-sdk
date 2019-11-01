@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-
+import {API_HOST} from '../../ApiConfig';
 import {Link} from 'react-router-dom';
 
 export default class ProductDetail extends React.Component {
@@ -13,7 +13,7 @@ export default class ProductDetail extends React.Component {
 
     componentDidMount() {
         this.props.setPageTitle('Product Detail');
-        axios.get('http://master:8081/products/' + this.props.match.params.id).then(res => {
+        axios.get(API_HOST + '/products/' + this.props.match.params.id).then(res => {
             console.log(res.data)
             if (res.data.status) {
                 this.setState({ product: res.data.data })
