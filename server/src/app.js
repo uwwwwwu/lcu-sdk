@@ -34,6 +34,7 @@ app.post('/setup-sample-users', async (req, res) => {
 	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(JSON.parse(e.endorsements[0].message));
+		return;
 	}
 	await networkObj.gateway.disconnect();
 
@@ -48,6 +49,7 @@ app.get('/user/:userId', async (req, res) => {
 	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(JSON.parse(e.message));
+		return;
 	}
 	await networkObj.gateway.disconnect();
 
@@ -108,6 +110,7 @@ app.post('/buy-product', async (req, res) => {
 	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(JSON.parse(e.endorsements[0].message));
+		return;
 	}
 	await networkObj.gateway.disconnect();
 
@@ -122,6 +125,7 @@ app.get('/product-history/:productId', async (req, res) => {
 	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(JSON.parse(e.message));
+		return;
 	}
 	await networkObj.gateway.disconnect();
 
@@ -136,6 +140,22 @@ app.get('/products', async (req, res) => {
 	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(JSON.parse(e.message));
+		return;
+	}
+	await networkObj.gateway.disconnect();
+
+	res.send(JSON.parse(response.toString()));
+});
+
+app.get('/gap-certificate/:number', async (req, res) => {
+	let networkObj = await network.connectToNetwork(appAdmin);
+	var response;
+	try {
+		response = await networkObj.contract.evaluateTransaction('GetGAPCertificateByNumber', req.params.number.toString());
+	} catch (e) {
+		await networkObj.gateway.disconnect();
+		res.send(JSON.parse(e.message));
+		return;
 	}
 	await networkObj.gateway.disconnect();
 
@@ -150,6 +170,7 @@ app.get('/products/:productId', async (req, res) => {
 	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(JSON.parse(e.message));
+		return;
 	}
 	await networkObj.gateway.disconnect();
 

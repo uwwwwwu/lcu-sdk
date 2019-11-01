@@ -12,7 +12,13 @@ export default class AddProduct extends React.Component {
             productName: '',
             farmhouse: '',
             price: '',
-            amount: ''
+            amount: '',
+            gapCertNum: '',
+            envCertNum: '',
+            isValidGAP: false,
+            gapMessage: 'Enter GAP Certificate Number',
+            isValidEnv: false,
+            envMessage: 'Enter Environment-friendly Certificate Number'
         }
     }
     componentDidMount() {
@@ -28,6 +34,8 @@ export default class AddProduct extends React.Component {
     onFarmHouseChanged(e) { this.setState({ farmhouse: e.target.value }) }
     onPriceChanged(e) { this.setState({ price: e.target.value }) }
     onAmountChanged(e) { this.setState({ amount: e.target.value }) }
+    onGAPCertNumChanged(e) { this.setState({ gapCertNum: e.target.value }) }
+    onEnvCertNumChanged(e) { this.setState({ envCertNum: e.target.value }) }
 
     onInputFileChanged(event) {
         var file = this.refs.inputFile.files[0];
@@ -146,13 +154,13 @@ export default class AddProduct extends React.Component {
                                         <div className="form-row">
                                             <div className="col-md-12 mb-3">
                                                 <label htmlFor="gap-cert">GAP Certificate Number</label>
-                                                <input type="text" style={{backgroundPosition: '97%'}} className="form-control is-valid" id="gap-cert" placeholder="GAP Certificate Number" required />
-                                                <div className="valid-feedback">Valid Certificate</div>
+                                                <input type="text" style={{backgroundPosition: '97%'}} value={this.state.envCertNum} onChange={this.onGAPCertNumChanged.bind(this)} className={this.state.isValidGAP ? 'form-control is-valid' : 'form-control is-invalid'} id="gap-cert" placeholder="GAP Certificate Number" required />
+                                                <div className={this.state.isValidGAP ? 'valid-feedback' : 'invalid-feedback'}>{this.state.gapMessage}</div>
                                             </div>
                                             <div className="col-md-12 mb-3">
                                                 <label htmlFor="env-cert">Environment-friendly Certificate Number</label>
-                                                <input type="text" style={{backgroundPosition: '97%'}} className="form-control is-invalid" id="env-cert" placeholder="Environment-friendly Certificate Number" required />
-                                                <div className="invalid-feedback">asdf Certificate</div>
+                                                <input type="text" style={{backgroundPosition: '97%'}} value={this.state.envCertNum} onChange={this.onEnvCertNumChanged.bind(this)} className={this.state.isValidEnv ? 'form-control is-valid' : 'form-control is-invalid'} id="env-cert" placeholder="Environment-friendly Certificate Number" required />
+                                                <div className={this.state.isValidEnv ? 'valid-feedback' : 'invalid-feedback'}>{this.state.envMessage}</div>
                                             </div>
                                         </div>
                                     </div>
