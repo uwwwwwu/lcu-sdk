@@ -228,6 +228,7 @@ app.get('/blockchain', async (req, res) => {
 		blocks.push(getBlockDetail(block));
 	}
 
+	response['blocks'] = blocks;
 	res.json(response)
 })
 
