@@ -233,7 +233,7 @@ app.get('/blockchain', async (req, res) => {
 
 
 function getBlockDetail(block) {
-	response = {
+	var response = {
 		blockNumber: block.header.number,
 		blockHash: calculateBlockHash(block.header),
 		previousHash: block.header.previous_hash,
