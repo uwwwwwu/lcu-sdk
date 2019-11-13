@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-
+import {API_HOST} from '../../ApiConfig';
 import {Link} from 'react-router-dom';
 
 export default class ProductList extends React.Component {
@@ -13,7 +13,7 @@ export default class ProductList extends React.Component {
 
     componentDidMount() {
         this.props.setPageTitle('Product List');
-        axios.get('http://master:8081/products').then(res => {
+        axios.get(API_HOST + '/products').then(res => {
             console.log(res.data)
             if (res.data.status) {
                 this.setState({ products: res.data.data });
@@ -24,8 +24,8 @@ export default class ProductList extends React.Component {
     }
     render() {
         let productCards = this.state.products.map(p => {
-            return <div key={p.product_id} className="col-md-6 col-lg-4" style={{ paddingBottom: 20 }}>
-                <div className="card">
+            return <div key={p.product_id} className="col-md-6 col-lg-4" style={{ paddingBottom: 20}}>
+                <div className="card" style={{ height: 384 }}>
                     <img className="card-img-top w-100 d-block" src={p.image} alt='thumbnail' style={{width:'100%', height: 200, objectFit: 'cover'}} />
                     <div className="card-body">
                         <h4 className="card-title text-center">{p.product_name}<br /></h4>

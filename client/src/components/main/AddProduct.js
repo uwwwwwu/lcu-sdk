@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import {API_HOST} from '../../ApiConfig';
+import { API_HOST } from '../../ApiConfig';
 
 export default class AddProduct extends React.Component {
     constructor() {
@@ -34,7 +34,22 @@ export default class AddProduct extends React.Component {
     onFarmHouseChanged(e) { this.setState({ farmhouse: e.target.value }) }
     onPriceChanged(e) { this.setState({ price: e.target.value }) }
     onAmountChanged(e) { this.setState({ amount: e.target.value }) }
-    onGAPCertNumChanged(e) { this.setState({ gapCertNum: e.target.value }) }
+    onGAPCertNumChanged(e) {
+        this.setState({ gapCertNum: e.target.value });
+        axios.get(API_HOST + '/gap-certificate/' + e.target.value).then(res => {
+            if (res.data.status) {
+                if (res.data.is_valid_certificate) {
+                    this.setState({ isValidGAP: true, gapMessage: 'Certificate valid until ' + res.data.data.valid_until.slice(0, 10) })
+                } else {
+                    this.setState({ isValidGAP: false, gapMessage: 'Certificate expired' })
+                }
+            } else {
+                this.setState({ isValidGAP: false, gapMessage: res.data.error })
+            }
+        }).catch(e => {
+            console.log(e)
+        })
+    }
     onEnvCertNumChanged(e) { this.setState({ envCertNum: e.target.value }) }
 
     onInputFileChanged(event) {
@@ -63,19 +78,20 @@ export default class AddProduct extends React.Component {
 
         const formData = new FormData();
         formData.append('image', this.state.imageFile);
-        const config = {headers: {'content-type': 'multipart/form-data'}};
+        const config = { headers: { 'content-type': 'multipart/form-data' } };
         axios.post(API_HOST + "/upload", formData, config).then((res) => {
             console.log(res.data)
             if (res.data.status) {
                 var imageUrl = res.data.data;
 
                 axios.post(API_HOST + '/add-product', {
-                    supplierId: "cl",
+                    supplierId: localStorage.getItem('userId'),
                     productId: this.state.productId,
                     productName: this.state.productName,
                     farmhouse: this.state.farmhouse,
                     price: this.state.price,
-                    verifiedBy: "CBNU Coop",
+                    gapCertNum: this.state.gapCertNum,
+                    envCertNum: this.state.envCertNum,
                     amount: this.state.amount,
                     image: imageUrl
                 }).then(res => {
@@ -83,7 +99,7 @@ export default class AddProduct extends React.Component {
                     if (res.data.status) {
                         alert(res.data.message)
                     } else {
-                        console.log(res.data.error)
+                        alert(res.data.error)
                     }
                 }).catch(e => {
                     console.log(e)
@@ -114,31 +130,31 @@ export default class AddProduct extends React.Component {
                                     <div className="form-group row">
                                         <label htmlFor="name" className="col-sm-3 col-form-label">ID</label>
                                         <div className="col-sm-9">
-                                            <input type="text" className="form-control" id="name" value={this.state.productId} onChange={this.onProductIdChanged.bind(this)} placeholder='Product ID' />
+                                            <input type="number" className="form-control" id="name" value={this.state.productId} onChange={this.onProductIdChanged.bind(this)} placeholder='Product ID' required />
                                         </div>
                                     </div>
                                     <div className="form-group row">
                                         <label htmlFor="name" className="col-sm-3 col-form-label">Name</label>
                                         <div className="col-sm-9">
-                                            <input type="text" className="form-control" id="name" value={this.state.productName} onChange={this.onProductNameChanged.bind(this)} placeholder='Product Name' />
+                                            <input type="text" className="form-control" id="name" value={this.state.productName} onChange={this.onProductNameChanged.bind(this)} placeholder='Product Name' required />
                                         </div>
                                     </div>
                                     <div className="form-group row">
                                         <label htmlFor="farmhouse" className="col-sm-3 col-form-label">Farmhouse</label>
                                         <div className="col-sm-9">
-                                            <input type="text" className="form-control" id="farmouse" value={this.state.farmhouse} onChange={this.onFarmHouseChanged.bind(this)} placeholder='Farmhouse' />
+                                            <input type="text" className="form-control" id="farmouse" value={this.state.farmhouse} onChange={this.onFarmHouseChanged.bind(this)} placeholder='Farmhouse' required />
                                         </div>
                                     </div>
                                     <div className="form-group row">
                                         <label htmlFor="price" className="col-sm-3 col-form-label">Price</label>
                                         <div className="col-sm-9">
-                                            <input type="text" className="form-control" id="price" value={this.state.price} onChange={this.onPriceChanged.bind(this)} placeholder='Price' />
+                                            <input type="number" className="form-control" id="price" value={this.state.price} onChange={this.onPriceChanged.bind(this)} placeholder='Price' required />
                                         </div>
                                     </div>
                                     <div className="form-group row">
                                         <label htmlFor="amount" className="col-sm-3 col-form-label">Amount</label>
                                         <div className="col-sm-9">
-                                            <input type="text" className="form-control" id="amount" value={this.state.amount} onChange={this.onAmountChanged.bind(this)} placeholder="Amount" />
+                                            <input type="number" className="form-control" id="amount" value={this.state.amount} onChange={this.onAmountChanged.bind(this)} placeholder="Amount" required />
                                         </div>
                                     </div>
                                 </div>
@@ -154,21 +170,19 @@ export default class AddProduct extends React.Component {
                                         <div className="form-row">
                                             <div className="col-md-12 mb-3">
                                                 <label htmlFor="gap-cert">GAP Certificate Number</label>
-                                                <input type="text" style={{backgroundPosition: '97%'}} value={this.state.envCertNum} onChange={this.onGAPCertNumChanged.bind(this)} className={this.state.isValidGAP ? 'form-control is-valid' : 'form-control is-invalid'} id="gap-cert" placeholder="GAP Certificate Number" required />
+                                                <input type="text" style={{ backgroundPosition: '97%'}} value={this.state.gapCertNum} onChange={this.onGAPCertNumChanged.bind(this)} className={this.state.isValidGAP ? 'form-control is-valid' : 'form-control is-invalid'} id="gap-cert" placeholder="GAP Certificate Number" required />
                                                 <div className={this.state.isValidGAP ? 'valid-feedback' : 'invalid-feedback'}>{this.state.gapMessage}</div>
                                             </div>
                                             <div className="col-md-12 mb-3">
-                                                <label htmlFor="env-cert">Environment-friendly Certificate Number</label>
-                                                <input type="text" style={{backgroundPosition: '97%'}} value={this.state.envCertNum} onChange={this.onEnvCertNumChanged.bind(this)} className={this.state.isValidEnv ? 'form-control is-valid' : 'form-control is-invalid'} id="env-cert" placeholder="Environment-friendly Certificate Number" required />
+                                                <label htmlFor="env-cert">Environment-friendly Certificate Number (optional)</label>
+                                                <input type="text" style={{ backgroundPosition: '97%' }} value={this.state.envCertNum} onChange={this.onEnvCertNumChanged.bind(this)} className={this.state.isValidEnv ? 'form-control is-valid' : 'form-control is-invalid'} id="env-cert" placeholder="Environment-friendly Certificate Number" />
                                                 <div className={this.state.isValidEnv ? 'valid-feedback' : 'invalid-feedback'}>{this.state.envMessage}</div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div className="col-md-12 col-lg-12">
-                                <div className="summary">
-                                    <button className="btn btn-primary btn-block btn-lg" type="submit"><strong>Add Product</strong></button>
+                                    <div className="summary">
+                                        <button className="btn btn-primary btn-block btn-lg" type="submit"><strong>Add Product</strong></button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
