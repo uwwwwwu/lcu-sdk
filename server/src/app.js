@@ -8,6 +8,9 @@ const util = require('util');
 const path = require('path');
 const fs = require('fs');
 
+const asn = require('asn1.js')
+const sha = require('js-sha256');
+
 const multer = require('multer');
 
 let network = require('./fabric/network.js');
@@ -214,7 +217,44 @@ app.get('/blockchain', async (req, res) => {
 
 
 	let block = await networkObj.network.channel.queryBlock(blockHeight -1);
+	printBlockInfo(block)
 	res.json(block)
 })
+
+
+function printBlockInfo(block) {
+    console.log('Block Number: ' + block.header.number);
+    console.log('Block Hash: ' +calculateBlockHash(block.header))
+    console.log('\tPrevious Hash: ' + block.header.previous_hash);
+    console.log('\tData Hash: ' + block.header.data_hash);
+    console.log('\tTransactions Count: ' + block.data.data.length);
+
+    block.data.data.forEach(transaction => {
+		console.log('\t\tTransaction ID: ' + transaction.payload.header.channel_header.tx_id);
+		console.log('\t\tCreator ID: ' + transaction.payload.header.signature_header.creator.Mspid);
+		// Following lines if uncommented will dump too much info :)
+		//   console.log('Data: ');
+		//   console.log(JSON.stringify(transaction.payload.data));
+    })
+}
+
+function calculateBlockHash(header) {
+    let headerAsn = asn.define('headerAsn', function () {
+        this.seq().obj(
+            this.key('Number').int(),
+            this.key('PreviousHash').octstr(),
+            this.key('DataHash').octstr()
+        );
+    });
+
+    let output = headerAsn.encode({
+        Number: parseInt(header.number),
+        PreviousHash: Buffer.from(header.previous_hash, 'hex'),
+        DataHash: Buffer.from(header.data_hash, 'hex')
+    }, 'der');
+
+    let hash = sha.sha256(output);
+    return hash;
+}
 
 app.listen(process.env.PORT || 8081);
