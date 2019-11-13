@@ -207,4 +207,10 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 	res.json({status: true, data: 'http://master:8081/images/' + req.file.filename});
 });
 
+app.get('/blockchain', async (req, res) => {
+	let networkObj = await network.connectToNetwork(appAdmin);
+	let block = await networkObj.network.channel.queryBlock(4);
+	res.json(block)
+})
+
 app.listen(process.env.PORT || 8081);
