@@ -241,7 +241,7 @@ function getBlockDetail(block) {
 		transactionCount: block.data.data.length
 	}
 	
-	transactions = []
+	var transactions = []
 
     block.data.data.forEach(transaction => {
 		transactions.push({
