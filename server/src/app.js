@@ -209,7 +209,11 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 
 app.get('/blockchain', async (req, res) => {
 	let networkObj = await network.connectToNetwork(appAdmin);
-	let block = await networkObj.network.channel.queryBlock(4);
+	let info = await networkObj.network.channel.queryInfo();
+	const blockHeight = parseInt(info.height.low);
+
+
+	let block = await networkObj.network.channel.queryBlock(blockHeight -1);
 	res.json(block)
 })
 
