@@ -215,27 +215,46 @@ app.get('/blockchain', async (req, res) => {
 	let info = await networkObj.network.channel.queryInfo();
 	const blockHeight = parseInt(info.height.low);
 
+	var response = {
+		blockHeight: blockHeight
+	}
 
-	let block = await networkObj.network.channel.queryBlock(blockHeight -1);
-	printBlockInfo(block)
-	res.json(block)
+	var blocks = []
+	for (var i=1 ; i<=12 ; i++) {
+		if (blockHeight-1 <= 0) {
+			break;
+		}
+		let block = await networkObj.network.channel.queryBlock(blockHeight-i);
+		blocks.push(getBlockDetail(block));
+	}
+
+	res.json(response)
 })
 
 
-function printBlockInfo(block) {
-    console.log('Block Number: ' + block.header.number);
-    console.log('Block Hash: ' +calculateBlockHash(block.header))
-    console.log('\tPrevious Hash: ' + block.header.previous_hash);
-    console.log('\tData Hash: ' + block.header.data_hash);
-    console.log('\tTransactions Count: ' + block.data.data.length);
+function getBlockDetail(block) {
+	response = {
+		blockNumber: block.header.number,
+		blockHash: calculateBlockHash(block.header),
+		previousHash: block.header.previous_hash,
+		dataHash: block.header.data_hash,
+		transactionCount: block.data.data.length
+	}
+	
+	transactions = []
 
     block.data.data.forEach(transaction => {
-		console.log('\t\tTransaction ID: ' + transaction.payload.header.channel_header.tx_id);
-		console.log('\t\tCreator ID: ' + transaction.payload.header.signature_header.creator.Mspid);
+		transactions.push({
+			transactionId: transaction.payload.header.channel_header.tx_id,
+			creatorId: transaction.payload.header.signature_header.creator.Mspid
+		})
 		//Following lines if uncommented will dump too much info :)
-		console.log('Data: ');
-		console.log(JSON.stringify(transaction.payload.data));
-    })
+		// console.log('Data: ');
+		// console.log(JSON.stringify(transaction.payload.data));
+	});
+	
+	response['transactions'] = transactions;
+	return response;
 }
 
 function calculateBlockHash(header) {
