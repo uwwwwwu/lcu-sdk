@@ -232,9 +232,9 @@ function printBlockInfo(block) {
     block.data.data.forEach(transaction => {
 		console.log('\t\tTransaction ID: ' + transaction.payload.header.channel_header.tx_id);
 		console.log('\t\tCreator ID: ' + transaction.payload.header.signature_header.creator.Mspid);
-		// Following lines if uncommented will dump too much info :)
-		//   console.log('Data: ');
-		//   console.log(JSON.stringify(transaction.payload.data));
+		//Following lines if uncommented will dump too much info :)
+		console.log('Data: ');
+		console.log(JSON.stringify(transaction.payload.data));
     })
 }
 
