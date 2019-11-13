@@ -235,7 +235,7 @@ app.get('/blockchain', async (req, res) => {
 
 function getBlockDetail(block) {
 	var response = {
-		blockNumber: block.header.number,
+		blockNumber: parseInt(block.header.number),
 		blockHash: calculateBlockHash(block.header),
 		previousHash: block.header.previous_hash,
 		dataHash: block.header.data_hash,
