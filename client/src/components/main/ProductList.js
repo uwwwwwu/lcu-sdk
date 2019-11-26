@@ -12,7 +12,7 @@ export default class ProductList extends React.Component {
     }
 
     componentDidMount() {
-        this.props.setPageTitle('Product List');
+        this.props.setPageTitle('상품목록');
         axios.get(API_HOST + '/products').then(res => {
             console.log(res.data)
             if (res.data.status) {

@@ -2,7 +2,7 @@ import React from 'react';
 
 export default class Cooperative extends React.Component {
     componentDidMount() {
-        this.props.setPageTitle('Cooperative');
+        this.props.setPageTitle('소개');
     }
     render() {
         return (

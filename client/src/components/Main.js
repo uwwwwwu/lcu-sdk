@@ -40,9 +40,9 @@ export default class Main extends React.Component {
                                         <div className="col-md-8 product-info">
                                             <div>
                                                 <ul className="nav nav-tabs nav-fill">
-                                                    <Link to='/' className='nav-item'><span className="nav-link border-secondary" style={this.state.pageTitle === 'Cooperative' ? style.active : style.normal}>Introduce</span></Link>
-                                                    <Link to='/products' className='nav-item'><span className="nav-link border-secondary" style={this.state.pageTitle === 'Product List' || this.state.pageTitle === 'Product Detail' || this.state.pageTitle === 'Purchase' ? style.active : style.normal}>Product Purchase</span></Link>
-                                                    <Link to='/order-history' className='nav-item'><span className="nav-link border-secondary" style={this.state.pageTitle === 'Order History' ? style.active : style.normal}>Order History</span></Link>
+                                                    <Link to='/' className='nav-item'><span className="nav-link border-secondary" style={this.state.pageTitle === 'Cooperative' ? style.active : style.normal}>소개</span></Link>
+                                                    <Link to='/products' className='nav-item'><span className="nav-link border-secondary" style={this.state.pageTitle === 'Product List' || this.state.pageTitle === 'Product Detail' || this.state.pageTitle === 'Purchase' ? style.active : style.normal}>상품목록</span></Link>
+                                                    <Link to='/order-history' className='nav-item'><span className="nav-link border-secondary" style={this.state.pageTitle === 'Order History' ? style.active : style.normal}>주문내역</span></Link>
                                                 </ul>
                                             </div>
                                         </div>

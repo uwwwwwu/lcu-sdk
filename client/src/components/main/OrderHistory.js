@@ -2,13 +2,13 @@ import React from 'react';
 
 export default class OrderHistory extends React.Component {
     componentDidMount() {
-        this.props.setPageTitle('Order History');
+        this.props.setPageTitle('주문내역');
     }
     render() {
         return (
             <div className="col-md-12 col-lg-8 col-xl-8">
                 <div className="items" style={{ padding: '30px', paddingBottom: '15px' }}>
-                    <h1><strong>Order Details Inquiry</strong><br /></h1>
+                    <h1><strong>주문내역</strong><br /></h1>
                 </div>
                 <div className="items" style={{ paddingTop: '15px', paddingBottom: '15px' }}>
                     <div className="product"></div>
@@ -16,11 +16,11 @@ export default class OrderHistory extends React.Component {
                         <table className="table">
                             <thead>
                                 <tr>
-                                    <th><strong>Order #</strong><br /></th>
-                                    <th><strong>Product</strong><br /></th>
-                                    <th><strong>Order Date</strong><br /></th>
-                                    <th><strong>Amount</strong></th>
-                                    <th><strong>Order Status</strong></th>
+                                    <th><strong>주문번호</strong><br /></th>
+                                    <th><strong>상품명</strong><br /></th>
+                                    <th><strong>주문날짜</strong><br /></th>
+                                    <th><strong>수량</strong></th>
+                                    <th><strong>주문상</strong></th>
                                 </tr>
                             </thead>
                             <tbody>

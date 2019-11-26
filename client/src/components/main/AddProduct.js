@@ -34,6 +34,7 @@ export default class AddProduct extends React.Component {
     onFarmHouseChanged(e) { this.setState({ farmhouse: e.target.value }) }
     onPriceChanged(e) { this.setState({ price: e.target.value }) }
     onAmountChanged(e) { this.setState({ amount: e.target.value }) }
+    onUnitChanged(e) { this.setState({ unit: e.target.value }) }
     onGAPCertNumChanged(e) {
         this.setState({ gapCertNum: e.target.value });
         axios.get(API_HOST + '/gap-certificate/' + e.target.value).then(res => {
@@ -50,7 +51,8 @@ export default class AddProduct extends React.Component {
             console.log(e)
         })
     }
-    onEnvCertNumChanged(e) { this.setState({ envCertNum: e.target.value }) }
+    onEnvCertNumChanged(e) { 
+	this.setState({ envCertNum: e.target.value }) }
 
     onInputFileChanged(event) {
         var file = this.refs.inputFile.files[0];
@@ -93,7 +95,8 @@ export default class AddProduct extends React.Component {
                     gapCertNum: this.state.gapCertNum,
                     envCertNum: this.state.envCertNum,
                     amount: this.state.amount,
-                    image: imageUrl
+                    unit: this.state.unit
+		    image: imageUrl
                 }).then(res => {
                     console.log(res.data)
                     if (res.data.status) {
@@ -117,7 +120,7 @@ export default class AddProduct extends React.Component {
             <div className="col-md-12 col-lg-8 col-xl-8">
                 <form onSubmit={this.onFormSubmit.bind(this)}>
                     <div className="items" style={{ padding: '30px', paddingBottom: '15px' }}>
-                        <h1><strong>충북 보은 생대추</strong></h1>
+                        <h1><strong>상품정보</strong></h1>
                     </div>
                     <div className="items" style={{ paddingTop: '15px', paddingBottom: '15px' }}>
                         <div className="product">
@@ -134,27 +137,33 @@ export default class AddProduct extends React.Component {
                                         </div>
                                     </div>
                                     <div className="form-group row">
-                                        <label htmlFor="name" className="col-sm-3 col-form-label">Name</label>
+                                        <label htmlFor="name" className="col-sm-3 col-form-label">상품</label>
                                         <div className="col-sm-9">
                                             <input type="text" className="form-control" id="name" value={this.state.productName} onChange={this.onProductNameChanged.bind(this)} placeholder='Product Name' required />
                                         </div>
                                     </div>
                                     <div className="form-group row">
-                                        <label htmlFor="farmhouse" className="col-sm-3 col-form-label">Farmhouse</label>
+                                        <label htmlFor="farmhouse" className="col-sm-3 col-form-label">농장명</label>
                                         <div className="col-sm-9">
                                             <input type="text" className="form-control" id="farmouse" value={this.state.farmhouse} onChange={this.onFarmHouseChanged.bind(this)} placeholder='Farmhouse' required />
                                         </div>
                                     </div>
                                     <div className="form-group row">
-                                        <label htmlFor="price" className="col-sm-3 col-form-label">Price</label>
+                                        <label htmlFor="price" className="col-sm-3 col-form-label">가격</label>
                                         <div className="col-sm-9">
                                             <input type="number" className="form-control" id="price" value={this.state.price} onChange={this.onPriceChanged.bind(this)} placeholder='Price' required />
                                         </div>
                                     </div>
                                     <div className="form-group row">
-                                        <label htmlFor="amount" className="col-sm-3 col-form-label">Amount</label>
+                                        <label htmlFor="amount" className="col-sm-3 col-form-label">수량</label>
                                         <div className="col-sm-9">
                                             <input type="number" className="form-control" id="amount" value={this.state.amount} onChange={this.onAmountChanged.bind(this)} placeholder="Amount" required />
+                                        </div>
+                                    </div>
+				    <div className="form-group row">
+                                        <label htmlFor="Unit" className="col-sm-3 col-form-label">단위 (g)</label>
+                                        <div className="col-sm-9">
+                                            <input type="number" className="form-control" id="Unit" value={this.state.unit} onChange={this.onUnitChanged.bind(this)} placeholder="1000g = 1kg" required />
                                         </div>
                                     </div>
                                 </div>
@@ -166,22 +175,22 @@ export default class AddProduct extends React.Component {
                             <div className="col-md-12 col-lg-12">
                                 <div className="items" style={{ backgroundColor: 'rgb(247,251,255)' }}>
                                     <div className="products">
-                                        <h4 className="title">Certificate Status</h4>
+                                        <h4 className="title">인증정보</h4>
                                         <div className="form-row">
                                             <div className="col-md-12 mb-3">
-                                                <label htmlFor="gap-cert">GAP Certificate Number</label>
+                                                <label htmlFor="gap-cert">GAP인증번호</label>
                                                 <input type="text" style={{ backgroundPosition: '97%'}} value={this.state.gapCertNum} onChange={this.onGAPCertNumChanged.bind(this)} className={this.state.isValidGAP ? 'form-control is-valid' : 'form-control is-invalid'} id="gap-cert" placeholder="GAP Certificate Number" required />
                                                 <div className={this.state.isValidGAP ? 'valid-feedback' : 'invalid-feedback'}>{this.state.gapMessage}</div>
                                             </div>
                                             <div className="col-md-12 mb-3">
-                                                <label htmlFor="env-cert">Environment-friendly Certificate Number (optional)</label>
+                                                <label htmlFor="env-cert">친환경인증번호(optional)</label>
                                                 <input type="text" style={{ backgroundPosition: '97%' }} value={this.state.envCertNum} onChange={this.onEnvCertNumChanged.bind(this)} className={this.state.isValidEnv ? 'form-control is-valid' : 'form-control is-invalid'} id="env-cert" placeholder="Environment-friendly Certificate Number" />
                                                 <div className={this.state.isValidEnv ? 'valid-feedback' : 'invalid-feedback'}>{this.state.envMessage}</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="summary">
-                                        <button className="btn btn-primary btn-block btn-lg" type="submit"><strong>Add Product</strong></button>
+                                        <button className="btn btn-primary btn-block btn-lg" type="submit"><strong>상품등록</strong></button>
                                     </div>
                                 </div>
                             </div>

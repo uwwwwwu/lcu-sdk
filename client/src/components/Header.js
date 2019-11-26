@@ -5,7 +5,7 @@ import {API_HOST} from '../ApiConfig';
 
 export default class Header extends React.Component {
     onLoginClick() {
-        var userId = prompt("Development ONLY!!! Enter User ID");
+        var userId = prompt("User ID를 입력하세요. ");
         if (userId === null) {
             return;
         }
@@ -15,7 +15,7 @@ export default class Header extends React.Component {
         if (userId !== null || userId !== '') { 
             axios.get(API_HOST + '/user/' + userId).then(res => {
                 if (res.data.status) {
-                    alert('Success! Login as ' + res.data.data.name);
+                    alert(res.data.data.name + '님 로그인되었습니다.');
                     localStorage.setItem('userId', userId);
                     localStorage.setItem('username', res.data.data.name);
                     window.location.reload();
@@ -35,8 +35,8 @@ export default class Header extends React.Component {
                         className="collapse navbar-collapse" id="navcol-1">
                         <ul className="nav navbar-nav ml-auto">
                             <li className="nav-item" role="presentation"><Link className="nav-link" to="/">Home</Link></li>
-                            <li className="nav-item" role="presentation"><Link className="nav-link" to="/add-product">Add Product</Link></li>
-                            <li className="nav-item" role="presentation"><p style={{cursor: 'pointer'}} onClick={this.onLoginClick.bind(this)} className="nav-link">Login</p></li>
+                            <li className="nav-item" role="presentation"><Link className="nav-link" to="/add-product">상품등록</Link></li>
+                            <li className="nav-item" role="presentation"><p style={{cursor: 'pointer'}} onClick={this.onLoginClick.bind(this)} className="nav-link">로그인</p></li>
                         </ul>
                     </div>
                 </div>
