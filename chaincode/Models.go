@@ -56,6 +56,17 @@ type GAPCertificate struct {
 	CreatedDate              time.Time `json:"created_date"`               // 지정일자         ==> 18/09/06
 }
 
+
+type GreenCertificate struct {
+	DocType                  string    `json:"doc_type"`
+	CertificateNumber        string    `json:"certificate_number"`         // 인증번호         ==> 1000003
+	ProducerOrganization     string    `json:"producer_organization"`      // 생산자단체명     ==> 김광일
+	CertifiedProductName     string    `json:"certified_product_name"`     // 인증품목명       ==> 인삼류(기타)
+	CultivatedArea           string    `json:"cultivated_area"`            // 재배면적         ==> 70657
+	ProductionPlan           string    `json:"production_plan"`            // 생산계획량       ==> 40.76
+	ValidFrom                time.Time `json:"valid_from"`                 // 유효기간 시작일  ==> 18/09/06
+	ValidUntil               time.Time `json:"valid_until"`                // 유효기간 종료일  ==> 21/09/05
+}
 /*
 
 ==================== 친환경인증품목Eco-friendly certification items =======================
