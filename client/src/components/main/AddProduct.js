@@ -13,12 +13,13 @@ export default class AddProduct extends React.Component {
             farmhouse: '',
             price: '',
             amount: '',
+            unit: '',
             gapCertNum: '',
-            envCertNum: '',
+            greenCertNum: '',
             isValidGAP: false,
-            gapMessage: 'Enter GAP Certificate Number',
-            isValidEnv: false,
-            envMessage: 'Enter Environment-friendly Certificate Number'
+            gapMessage: 'GAP인증번호를 입력하세요.',
+            isValidGreen: false,
+            greenMessage: '친환경인증번호를 입력하세요.'
         }
     }
     componentDidMount() {
@@ -40,7 +41,7 @@ export default class AddProduct extends React.Component {
         axios.get(API_HOST + '/gap-certificate/' + e.target.value).then(res => {
             if (res.data.status) {
                 if (res.data.is_valid_certificate) {
-                    this.setState({ isValidGAP: true, gapMessage: 'Certificate valid until ' + res.data.data.valid_until.slice(0, 10) })
+                    this.setState({ isValidGAP: true, gapMessage: '유효기간:' + res.data.data.valid_until.slice(0, 10) })
                 } else {
                     this.setState({ isValidGAP: false, gapMessage: 'Certificate expired' })
                 }
@@ -51,8 +52,22 @@ export default class AddProduct extends React.Component {
             console.log(e)
         })
     }
-    onEnvCertNumChanged(e) { 
-	this.setState({ envCertNum: e.target.value }) }
+    onGreenCertNumChanged(e) { 
+        this.setState({ greenCertNum: e.target.value });
+        axios.get(API_HOST + '/green-certificate/' + e.target.value).then(res => {
+            if (res.data.status) {
+                if (res.data.is_valid_certificate) {
+                    this.setState({ isValidGreen: true, greenMessage: '유효기간:' + res.data.data.valid_until.slice(0, 10) })
+                } else {
+                    this.setState({ isValidGreen: false, greenMessage: 'Certificate expired' })
+                }
+            } else {
+                this.setState({ isValidGreen: false, greenMessage: res.data.error })
+            }
+        }).catch(e => {
+            console.log(e)
+        })
+    }
 
     onInputFileChanged(event) {
         var file = this.refs.inputFile.files[0];
@@ -93,9 +108,9 @@ export default class AddProduct extends React.Component {
                     farmhouse: this.state.farmhouse,
                     price: this.state.price,
                     gapCertNum: this.state.gapCertNum,
-                    envCertNum: this.state.envCertNum,
+                    greenCertNum: this.state.greenCertNum,
                     amount: this.state.amount,
-                    unit: this.state.unit
+                    unit: this.state.unit,
 		    image: imageUrl
                 }).then(res => {
                     console.log(res.data)
@@ -160,10 +175,10 @@ export default class AddProduct extends React.Component {
                                             <input type="number" className="form-control" id="amount" value={this.state.amount} onChange={this.onAmountChanged.bind(this)} placeholder="Amount" required />
                                         </div>
                                     </div>
-				    <div className="form-group row">
-                                        <label htmlFor="Unit" className="col-sm-3 col-form-label">단위 (g)</label>
+				                    <div className="form-group row">
+                                        <label htmlFor="unit" className="col-sm-3 col-form-label">단위 (g)</label>
                                         <div className="col-sm-9">
-                                            <input type="number" className="form-control" id="Unit" value={this.state.unit} onChange={this.onUnitChanged.bind(this)} placeholder="1000g = 1kg" required />
+                                            <input type="number" className="form-control" id="unit" value={this.state.unit} onChange={this.onUnitChanged.bind(this)} placeholder="1000g = 1kg" required />
                                         </div>
                                     </div>
                                 </div>
@@ -183,9 +198,9 @@ export default class AddProduct extends React.Component {
                                                 <div className={this.state.isValidGAP ? 'valid-feedback' : 'invalid-feedback'}>{this.state.gapMessage}</div>
                                             </div>
                                             <div className="col-md-12 mb-3">
-                                                <label htmlFor="env-cert">친환경인증번호(optional)</label>
-                                                <input type="text" style={{ backgroundPosition: '97%' }} value={this.state.envCertNum} onChange={this.onEnvCertNumChanged.bind(this)} className={this.state.isValidEnv ? 'form-control is-valid' : 'form-control is-invalid'} id="env-cert" placeholder="Environment-friendly Certificate Number" />
-                                                <div className={this.state.isValidEnv ? 'valid-feedback' : 'invalid-feedback'}>{this.state.envMessage}</div>
+                                                <label htmlFor="green-cert">친환경인증번호(optional)</label>
+                                                <input type="text" style={{ backgroundPosition: '97%' }} value={this.state.GreenCertNum} onChange={this.onGreenCertNumChanged.bind(this)} className={this.state.isValidGreen ? 'form-control is-valid' : 'form-control is-invalid'} id="green-cert" placeholder="Environment-friendly Certificate Number" />
+                                                <div className={this.state.isValidGreen ? 'valid-feedback' : 'invalid-feedback'}>{this.state.greenMessage}</div>
                                             </div>
                                         </div>
                                     </div>

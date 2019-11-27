@@ -66,8 +66,9 @@ app.post('/add-product', async (req, res) => {
 		(typeof req.body.farmhouse === 'undefined' || req.body.farmhouse === '') ||
 		(typeof req.body.price === 'undefined' || req.body.price === '') ||
 		(typeof req.body.gapCertNum === 'undefined' || req.body.gapCertNum === '') ||
-		(typeof req.body.envCertNum === 'undefined' || req.body.envCertNum === '') ||
+		(typeof req.body.greenCertNum === 'undefined' || req.body.greenCertNum === '') ||
 		(typeof req.body.amount === 'undefined' || req.body.amount === '') ||
+		(typeof req.body.unit === 'undefined' || req.body.unit === '') ||
 		(typeof req.body.image === 'undefined' || req.body.image === '')) {
 		res.send({ status: false, error: 'Missing body.' });
 		return;
@@ -82,12 +83,13 @@ app.post('/add-product', async (req, res) => {
 	var farmhouse = req.body.farmhouse.toString();
 	var price = req.body.price.toString();
 	var gapCertNum = req.body.gapCertNum.toString();
-	var envCertNum = req.body.envCertNum.toString();
+	var greenCertNum = req.body.greenCertNum.toString();
 	var amount = req.body.amount.toString();
+	var unit = req.body.unit.toString();
 	var image = req.body.image.toString();
 
 	try {
-		response = await networkObj.contract.submitTransaction('AddProduct', supplierId, productId, productName, farmhouse, price, gapCertNum, envCertNum, amount, image);
+		response = await networkObj.contract.submitTransaction('AddProduct', supplierId, productId, productName, farmhouse, price, gapCertNum, greenCertNum, amount, unit, image);
 	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(JSON.parse(e.endorsements[0].message));
@@ -155,6 +157,21 @@ app.get('/gap-certificate/:number', async (req, res) => {
 	var response;
 	try {
 		response = await networkObj.contract.evaluateTransaction('GetGAPCertificateByNumber', req.params.number.toString());
+	} catch (e) {
+		await networkObj.gateway.disconnect();
+		res.send(JSON.parse(e.message));
+		return;
+	}
+	await networkObj.gateway.disconnect();
+
+	res.send(JSON.parse(response.toString()));
+});
+
+app.get('/green-certificate/:number', async (req, res) => {
+	let networkObj = await network.connectToNetwork(appAdmin);
+	var response;
+	try {
+		response = await networkObj.contract.evaluateTransaction('GetGreenCertificateByNumber', req.params.number.toString());
 	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(JSON.parse(e.message));
