@@ -82,7 +82,7 @@ export default class ProductDetail extends React.Component {
             </div>
             <div className="col-md-6">
                 <p>GAP Certificate Number: <span style={{ color: '#007bff' }}>{this.state.detailData.value.gap_certificate_number}</span></p>
-                <p>Environment-friendly Certificate #: <span style={{ color: '#007bff' }}>{this.state.detailData.value.environment_friendly_certificate_number}</span></p>
+                <p>Environment-frie2ndly Certificate #: <span style={{ color: '#007bff' }}>{this.state.detailData.value.environment_friendly_certificate_number}</span></p>
                 <p>Timestamp: <span style={{ color: '#007bff' }}>{moment(this.state.detailData.value.modified_date).local().format('DD-MMM-YYYY [at] hh:mm:ss A')}</span></p>
                 <p>Remark: <span style={{ color: '#007bff' }}>{this.state.detailData.value.remark}</span></p>
             </div>
@@ -127,7 +127,6 @@ export default class ProductDetail extends React.Component {
                             <div className="col-md-9 mb-auto product-info">
                                 <div className="product-specs" style={{ marginBottom: '15px' }}>
                                     <div>GAP Certificate: <Link to={'#'} data-toggle="modal" data-target="#gap-cert">{this.state.product.gap_certificate_number}</Link> <i style={this.state.isValidGAP ? {color:'#00854a'} : {color:'red'}} className={this.state.isValidGAP ? 'icon-check icon' : 'icon-close icon'}></i></div>
-                                    <div>Environment-friendly certificate: <span style={{ color: '#007bff' }}>{this.state.product.environment_friendly_certificate_number}</span> <i style={{ color: '#00854a' }} className="icon-check icon"></i></div>
                                 </div>
                             </div>
                         </div>

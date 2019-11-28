@@ -66,7 +66,6 @@ app.post('/add-product', async (req, res) => {
 		(typeof req.body.farmhouse === 'undefined' || req.body.farmhouse === '') ||
 		(typeof req.body.price === 'undefined' || req.body.price === '') ||
 		(typeof req.body.gapCertNum === 'undefined' || req.body.gapCertNum === '') ||
-		(typeof req.body.greenCertNum === 'undefined' || req.body.greenCertNum === '') ||
 		(typeof req.body.amount === 'undefined' || req.body.amount === '') ||
 		(typeof req.body.unit === 'undefined' || req.body.unit === '') ||
 		(typeof req.body.image === 'undefined' || req.body.image === '')) {
@@ -83,13 +82,12 @@ app.post('/add-product', async (req, res) => {
 	var farmhouse = req.body.farmhouse.toString();
 	var price = req.body.price.toString();
 	var gapCertNum = req.body.gapCertNum.toString();
-	var greenCertNum = req.body.greenCertNum.toString();
 	var amount = req.body.amount.toString();
 	var unit = req.body.unit.toString();
 	var image = req.body.image.toString();
 
 	try {
-		response = await networkObj.contract.submitTransaction('AddProduct', supplierId, productId, productName, farmhouse, price, gapCertNum, greenCertNum, amount, unit, image);
+		response = await networkObj.contract.submitTransaction('AddProduct', supplierId, productId, productName, farmhouse, price, gapCertNum, amount, unit, image);
 	} catch (e) {
 		await networkObj.gateway.disconnect();
 		res.send(JSON.parse(e.endorsements[0].message));
@@ -167,20 +165,6 @@ app.get('/gap-certificate/:number', async (req, res) => {
 	res.send(JSON.parse(response.toString()));
 });
 
-app.get('/green-certificate/:number', async (req, res) => {
-	let networkObj = await network.connectToNetwork(appAdmin);
-	var response;
-	try {
-		response = await networkObj.contract.evaluateTransaction('GetGreenCertificateByNumber', req.params.number.toString());
-	} catch (e) {
-		await networkObj.gateway.disconnect();
-		res.send(JSON.parse(e.message));
-		return;
-	}
-	await networkObj.gateway.disconnect();
-
-	res.send(JSON.parse(response.toString()));
-});
 
 app.get('/products/:productId', async (req, res) => {
 	let networkObj = await network.connectToNetwork(appAdmin);
@@ -224,7 +208,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 		res.json({status: false, error: 'Error 505, Upload failed'});
 		return;
 	}
-	res.json({status: true, data: 'http://master:8081/images/' + req.file.filename});
+	res.json({status: true, data: 'http://192.168.142.21:8081/images/' + req.file.filename});
 });
 
 app.get('/blockchain', async (req, res) => {

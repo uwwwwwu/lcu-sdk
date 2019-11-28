@@ -15,11 +15,8 @@ export default class AddProduct extends React.Component {
             amount: '',
             unit: '',
             gapCertNum: '',
-            greenCertNum: '',
             isValidGAP: false,
             gapMessage: 'GAP인증번호를 입력하세요.',
-            isValidGreen: false,
-            greenMessage: '친환경인증번호를 입력하세요.'
         }
     }
     componentDidMount() {
@@ -52,22 +49,7 @@ export default class AddProduct extends React.Component {
             console.log(e)
         })
     }
-    onGreenCertNumChanged(e) { 
-        this.setState({ greenCertNum: e.target.value });
-        axios.get(API_HOST + '/green-certificate/' + e.target.value).then(res => {
-            if (res.data.status) {
-                if (res.data.is_valid_certificate) {
-                    this.setState({ isValidGreen: true, greenMessage: '유효기간:' + res.data.data.valid_until.slice(0, 10) })
-                } else {
-                    this.setState({ isValidGreen: false, greenMessage: 'Certificate expired' })
-                }
-            } else {
-                this.setState({ isValidGreen: false, greenMessage: res.data.error })
-            }
-        }).catch(e => {
-            console.log(e)
-        })
-    }
+    
 
     onInputFileChanged(event) {
         var file = this.refs.inputFile.files[0];
@@ -108,7 +90,6 @@ export default class AddProduct extends React.Component {
                     farmhouse: this.state.farmhouse,
                     price: this.state.price,
                     gapCertNum: this.state.gapCertNum,
-                    greenCertNum: this.state.greenCertNum,
                     amount: this.state.amount,
                     unit: this.state.unit,
 		    image: imageUrl
@@ -196,11 +177,6 @@ export default class AddProduct extends React.Component {
                                                 <label htmlFor="gap-cert">GAP인증번호</label>
                                                 <input type="text" style={{ backgroundPosition: '97%'}} value={this.state.gapCertNum} onChange={this.onGAPCertNumChanged.bind(this)} className={this.state.isValidGAP ? 'form-control is-valid' : 'form-control is-invalid'} id="gap-cert" placeholder="GAP Certificate Number" required />
                                                 <div className={this.state.isValidGAP ? 'valid-feedback' : 'invalid-feedback'}>{this.state.gapMessage}</div>
-                                            </div>
-                                            <div className="col-md-12 mb-3">
-                                                <label htmlFor="green-cert">친환경인증번호(optional)</label>
-                                                <input type="text" style={{ backgroundPosition: '97%' }} value={this.state.GreenCertNum} onChange={this.onGreenCertNumChanged.bind(this)} className={this.state.isValidGreen ? 'form-control is-valid' : 'form-control is-invalid'} id="green-cert" placeholder="Environment-friendly Certificate Number" />
-                                                <div className={this.state.isValidGreen ? 'valid-feedback' : 'invalid-feedback'}>{this.state.greenMessage}</div>
                                             </div>
                                         </div>
                                     </div>

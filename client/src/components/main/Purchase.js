@@ -48,7 +48,7 @@ export default class Purchase extends React.Component {
     onPaymentClick() {
         // check login
         if (localStorage.getItem('userId') === null) {
-            alert('Not login!!! Login first ^^');
+            alert('로그인 후 사용 가능합니다.');
             return;
         }
 
@@ -71,7 +71,7 @@ export default class Purchase extends React.Component {
         return (
             <div className="col-md-12 col-lg-8 col-xl-8">
                 <div className="items" style={{ padding: '30px', paddingBottom: '15px' }}>
-                    <h1><strong>Order / Payment</strong></h1>
+                    <h1><strong>주문 / 결제</strong></h1>
                 </div>
                 <div className="items" style={{ paddingTop: '15px', paddingBottom: '15px' }}>
                     <div className="product"></div>
@@ -79,9 +79,9 @@ export default class Purchase extends React.Component {
                         <table className="table">
                             <thead>
                                 <tr>
-                                    <th><strong>Product Information</strong></th>
-                                    <th><strong>Seller</strong></th>
-                                    <th><strong>Price</strong></th>
+                                    <th><strong>상품정보</strong></th>
+                                    <th><strong>판매자</strong></th>
+                                    <th><strong>가격</strong></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -119,14 +119,14 @@ export default class Purchase extends React.Component {
                         <div className="col-md-7 col-lg-7">
                             <div className="items" style={{ backgroundColor: 'rgb(247,251,255)' }}>
                                 <div className="products">
-                                    <h4 className="title">Delivery Information</h4>
-                                    <div className="item"><span className="price" style={{ fontWeight: 'bold' }}>Name :</span>
+                                    <h4 className="title">배송정보</h4>
+                                    <div className="item"><span className="price" style={{ fontWeight: 'bold' }}>이름 :</span>
                                         <p className="item-name">{this.state.buyer.name}</p>
                                     </div>
-                                    <div className="item"><span className="price" style={{ fontWeight: 'bold' }}>Phone :</span>
+                                    <div className="item"><span className="price" style={{ fontWeight: 'bold' }}>전화번호 :</span>
                                         <p className="item-name">{this.state.buyer.phone}</p>
                                     </div>
-                                    <div className="item"><span className="price" style={{ fontWeight: 'bold' }}>Address :</span>
+                                    <div className="item"><span className="price" style={{ fontWeight: 'bold' }}>주소 :</span>
                                         <p className="item-name">{this.state.buyer.address}</p>
                                     </div>
                                 </div>
@@ -134,9 +134,9 @@ export default class Purchase extends React.Component {
                         </div>
                         <div className="col-md-5 col-lg-5">
                             <div className="summary">
-                                <h3>Summary</h3>
-                                <h4><span className="text"><strong>Payment Amt:</strong></span><span className="price" style={{ marginLeft: 0 }}>{this.state.product.price * this.state.amount}원</span></h4>
-                                <button className="btn btn-primary btn-block btn-lg" type="button" onClick={this.onPaymentClick.bind(this)}><strong>Payment</strong></button>
+                                <h3>결제하기</h3>
+                                <h4><span className="text"><strong>총 금액:</strong></span><span className="price" style={{ marginLeft: 0 }}>{this.state.product.price * this.state.amount}원</span></h4>
+                                <button className="btn btn-primary btn-block btn-lg" type="button" onClick={this.onPaymentClick.bind(this)}><strong>결제하기</strong></button>
                             </div>
                         </div>
                     </div>

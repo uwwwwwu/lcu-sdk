@@ -40,10 +40,7 @@ func (lcu *LifeCooperationUnionChaincode) Invoke(stub shim.ChaincodeStubInterfac
 		return lcu.ImportGAPCertificate(stub, args)
 	case function == "GetGAPCertificateByNumber":
 		return lcu.GetGAPCertificateByNumber(stub, args)
-	case function == "ImportGreenCertificate":
-		return lcu.ImportGreenCertificate(stub, args)
-	case function == "GetGreenCertificateByNumber":
-		return lcu.GetGreenCertificateByNumber(stub, args)
+
 
 
 

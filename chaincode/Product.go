@@ -74,7 +74,7 @@ func (lcu *LifeCooperationUnionChaincode) GetProductById(stub shim.ChaincodeStub
 // AddProduct : add product to ledger
 func (lcu *LifeCooperationUnionChaincode) AddProduct(stub shim.ChaincodeStubInterface, args []string) peer.Response {
 	if len(args) < 9 {
-		return shim.Error("{\"status\":false,\"error\":\"9 arguments required: SupplierID, ProductID, ProductName, FarmHouse, Price, GAPCertNumber, EnvFriendlyCertNumber, Amount and Image.\"}")
+		return shim.Error("{\"status\":false,\"error\":\"9 arguments required: SupplierID, ProductID, ProductName, FarmHouse, Price, GAPCertNumber, Amount, Unit and Image.\"}")
 	}
 
 	supplierId := args[0]
@@ -118,16 +118,17 @@ func (lcu *LifeCooperationUnionChaincode) AddProduct(stub shim.ChaincodeStubInte
 	}
 
 	// Mark: If needed, check the valid status of certificate here
-
-	envFriendlyCertNumber := args[6]
-
-	// Validate price & amount
-	var price, amount int
+	// Validate price & amount & unit
+	var price, amount, unit int
 	price, err = strconv.Atoi(args[4])
 	if err != nil {
 		return shim.Error("{\"status\":false,\"error\":\"" + err.Error() + "\"}")
 	}
-	amount, err = strconv.Atoi(args[7])
+	amount, err = strconv.Atoi(args[6])
+	if err != nil {
+		return shim.Error("{\"status\":false,\"error\":\"" + err.Error() + "\"}")
+	}
+	unit, err = strconv.Atoi(args[7])
 	if err != nil {
 		return shim.Error("{\"status\":false,\"error\":\"" + err.Error() + "\"}")
 	}
@@ -136,7 +137,7 @@ func (lcu *LifeCooperationUnionChaincode) AddProduct(stub shim.ChaincodeStubInte
 
 	image := args[8]
 
-	var product = Product{DocType: "product", ProductId: productId, ProductName: productName, FarmHouse: farmHouse, Price: price, GAPCertificateNumber: gapCertNumber, EnvironmentFriendlyCertificateNumber: envFriendlyCertNumber, Amount: amount, ImportedBy: supplier, Remark: "Supplier added a product", Image: image, ModifiedDate: createdDate, CreatedDate: createdDate}
+	var product = Product{DocType: "product", ProductId: productId, ProductName: productName, FarmHouse: farmHouse, Price: price, GAPCertificateNumber: gapCertNumber, Amount: amount, Unit: unit, ImportedBy: supplier, Remark: "Supplier added a product", Image: image, ModifiedDate: createdDate, CreatedDate: createdDate}
 
 	productJson, _ := json.Marshal(product)
 
