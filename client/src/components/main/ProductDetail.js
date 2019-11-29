@@ -18,7 +18,7 @@ export default class ProductDetail extends React.Component {
     }
 
     componentDidMount() {
-        this.props.setPageTitle('Product Detail');
+        this.props.setPageTitle('상품보기');
         axios.get(API_HOST + '/products/' + this.props.match.params.id).then(res => {
             console.log(res.data)
             if (res.data.status) {
@@ -58,6 +58,7 @@ export default class ProductDetail extends React.Component {
     }
 
     render() {
+       
         let histories = this.state.histories.map((h, index) => {
             return <tr key={h.txn}>
                 <td>{moment(h.value.modified_date).local().format('DD-MMM-YYYY [at] hh:mm:ss A')}</td>
@@ -78,6 +79,7 @@ export default class ProductDetail extends React.Component {
                 <p>Farmhouse: <span style={{ color: '#007bff' }}>{this.state.detailData.value.farmhouse}</span></p>
                 <p>Amount: <span style={{ color: '#007bff' }}>{this.state.detailData.value.amount}개</span></p>
                 <p>Price: <span style={{ color: '#007bff' }}>{this.state.detailData.value.price}원</span></p>
+                <p>Unit: <span style={{ color: '#007bff' }}>{this.state.detailData.value.unit}g</span></p>
                 <p>Supplier: <span style={{ color: '#007bff' }}>{this.state.detailData.value.imported_by.name}</span></p>
             </div>
             <div className="col-md-6">
@@ -103,9 +105,10 @@ export default class ProductDetail extends React.Component {
                             <div className="col-md-9 mb-auto product-info">
                                 <Link className="product-name" to={'/purchase/' + this.props.match.params.id}>{this.state.product.product_name}</Link>
                                 <div className="product-specs">
-                                    <div><span>Farmhouse:&nbsp;</span><span className="value">{this.state.product.farmhouse}</span></div>
-                                    <div><span>In stock:&nbsp;</span><span className="value">{this.state.product.amount}개</span></div>
-                                    <div><span>Price:&nbsp;</span><span className="value">{this.state.product.price}원</span></div>
+                                    <div><span>농장명:&nbsp;</span><span className="value">{this.state.product.farmhouse}</span></div>
+                                    <div><span>수량:&nbsp;</span><span className="value">{this.state.product.amount}개</span></div>
+                                    <div><span>가격:&nbsp;</span><span className="value">{this.state.product.price}원</span></div>
+                                    <div><span>단위:&nbsp;</span><span className="value">{this.state.product.unit}g</span></div>
                                     <div>
                                         <Link to={'/purchase/' + this.props.match.params.id}>
                                             <button className="btn btn-outline-primary btn-sm text-center" type="button" style={{ margin: 0, marginBottom: '15px', padding: '6px 20px', marginTop: '15px' }}>Purchase</button>
@@ -122,7 +125,7 @@ export default class ProductDetail extends React.Component {
                     <div className="product">
                         <div className="row justify-content-center align-items-center">
                             <div className="col-md-3">
-                                <div className="product-image" style={{ padding: 0 }}><img className="img-fluid d-block mx-auto image" src="assets/img/fruit-1.jpg" alt='GAP Cert' /></div>
+                                <div className="product-image" style={{ padding: 0 }}><img className="img-fluid d-block mx-auto image" src="assets/img/GAP-logo.JPG" alt='GAP Cert' /></div>
                             </div>
                             <div className="col-md-9 mb-auto product-info">
                                 <div className="product-specs" style={{ marginBottom: '15px' }}>
@@ -181,7 +184,7 @@ export default class ProductDetail extends React.Component {
                     <div className="modal-dialog  modal-dialog-centered" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title" id="exampleModalLabel">GAP Certificate Information <i style={this.state.isValidGAP ? {color:'#00854a'} : {color: 'red'}} className={this.state.isValidGAP ? 'icon-check icon' : 'icon-close icon'}></i></h5>
+                                <h5 className="modal-title" id="exampleModalLabel">GAP 인증정보 <i style={this.state.isValidGAP ? {color:'#00854a'} : {color: 'red'}} className={this.state.isValidGAP ? 'icon-check icon' : 'icon-close icon'}></i></h5>
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>

@@ -17,7 +17,7 @@ export default class Purchase extends React.Component {
     }
 
     componentDidMount() {
-        this.props.setPageTitle('Purchase');
+        this.props.setPageTitle('구매하기');
 
         // check login
         if (localStorage.getItem('userId') === null) {

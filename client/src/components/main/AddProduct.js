@@ -20,7 +20,7 @@ export default class AddProduct extends React.Component {
         }
     }
     componentDidMount() {
-        this.props.setPageTitle('Add Product');
+        this.props.setPageTitle('상품등록');
     }
 
     onImageClick(e) {
@@ -29,7 +29,11 @@ export default class AddProduct extends React.Component {
 
     onProductIdChanged(e) { this.setState({ productId: e.target.value }) }
     onProductNameChanged(e) { this.setState({ productName: e.target.value }) }
-    onFarmHouseChanged(e) { this.setState({ farmhouse: e.target.value }) }
+    onFarmHouseChanged(e) { 
+        this.setState({ farmhouse: e.target.value }) ;
+
+
+    }
     onPriceChanged(e) { this.setState({ price: e.target.value }) }
     onAmountChanged(e) { this.setState({ amount: e.target.value }) }
     onUnitChanged(e) { this.setState({ unit: e.target.value }) }
@@ -112,6 +116,8 @@ export default class AddProduct extends React.Component {
     }
 
     render() {
+        let user = localStorage.getItem('userId') === null ? 'Not Login' : localStorage.getItem('username')
+        //user 이름 주석
         return (
             <div className="col-md-12 col-lg-8 col-xl-8">
                 <form onSubmit={this.onFormSubmit.bind(this)}>
@@ -135,25 +141,25 @@ export default class AddProduct extends React.Component {
                                     <div className="form-group row">
                                         <label htmlFor="name" className="col-sm-3 col-form-label">상품</label>
                                         <div className="col-sm-9">
-                                            <input type="text" className="form-control" id="name" value={this.state.productName} onChange={this.onProductNameChanged.bind(this)} placeholder='Product Name' required />
+                                            <input type="text" className="form-control" id="name" value={this.state.productName} onChange={this.onProductNameChanged.bind(this)} placeholder='품목명(Product name)' required />
                                         </div>
                                     </div>
                                     <div className="form-group row">
                                         <label htmlFor="farmhouse" className="col-sm-3 col-form-label">농장명</label>
                                         <div className="col-sm-9">
-                                            <input type="text" className="form-control" id="farmouse" value={this.state.farmhouse} onChange={this.onFarmHouseChanged.bind(this)} placeholder='Farmhouse' required />
+                                            <input type="text" className="form-control" id="farmouse" value={this.state.farmhouse} onChange={this.onFarmHouseChanged.bind(this)} placeholder={user} required />
                                         </div>
                                     </div>
                                     <div className="form-group row">
                                         <label htmlFor="price" className="col-sm-3 col-form-label">가격</label>
                                         <div className="col-sm-9">
-                                            <input type="number" className="form-control" id="price" value={this.state.price} onChange={this.onPriceChanged.bind(this)} placeholder='Price' required />
+                                            <input type="number" className="form-control" id="price" value={this.state.price} onChange={this.onPriceChanged.bind(this)} placeholder='가격(Price)' required />
                                         </div>
                                     </div>
                                     <div className="form-group row">
                                         <label htmlFor="amount" className="col-sm-3 col-form-label">수량</label>
                                         <div className="col-sm-9">
-                                            <input type="number" className="form-control" id="amount" value={this.state.amount} onChange={this.onAmountChanged.bind(this)} placeholder="Amount" required />
+                                            <input type="number" className="form-control" id="amount" value={this.state.amount} onChange={this.onAmountChanged.bind(this)} placeholder=" 수량(Amount)" required />
                                         </div>
                                     </div>
 				                    <div className="form-group row">

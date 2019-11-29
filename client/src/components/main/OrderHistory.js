@@ -20,7 +20,6 @@ export default class OrderHistory extends React.Component {
                                     <th><strong>상품명</strong><br /></th>
                                     <th><strong>주문날짜</strong><br /></th>
                                     <th><strong>수량</strong></th>
-                                    <th><strong>주문상</strong></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -29,7 +28,6 @@ export default class OrderHistory extends React.Component {
                                     <td>A농가 보은 대추<br /></td>
                                     <td>10/10/2019<br /></td>
                                     <td>1kg</td>
-                                    <td>Delivered</td>
                                 </tr>
                             </tbody>
                         </table>
